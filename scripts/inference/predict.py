@@ -31,7 +31,7 @@ EXCLUDE_COLS = {'Label', 'Category', 'Technique', 'URL', 'HTML_Content', 'Source
 
 
 def featurize(html: str) -> pd.DataFrame:
-    pipeline = joblib.load(MODELS_DIR / 'semantic_pipeline.joblib')
+    pipeline = joblib.load(MODELS_DIR / 'semantic_pipeline_10000_r20.joblib')
     feats = parse_html_features(html)
     hidden_text = feats.pop('hidden_text', '')
     lsa = pipeline.transform([hidden_text])
@@ -55,12 +55,12 @@ def featurize(html: str) -> pd.DataFrame:
 def score(html: str, model_name: str):
     X = featurize(html)
     model_paths = {
-        'xgb_tuned': 'xgb_tuned.joblib',
-        'xgb_baseline': 'xgb_baseline.joblib',
-        'rf': 'rf_model.joblib',
-        'lr': 'lr_model.joblib',
-        'or_ensemble': 'or_ensemble.joblib',
-        'weighted_ensemble': 'weighted_ensemble.joblib',
+        'xgb_tuned': 'xgb_tuned_10000_r20.joblib',
+        'xgb_baseline': 'xgb_baseline_10000_r20.joblib',
+        'rf': 'rf_model_10000_r20.joblib',
+        'lr': 'lr_model_10000_r20.joblib',
+        'or_ensemble': 'or_ensemble_10000_r20.joblib',
+        'weighted_ensemble': 'weighted_ensemble_10000_r20.joblib',
     }
     if model_name not in model_paths:
         raise SystemExit(f'Unknown model {model_name!r}. Available: {list(model_paths)}')
