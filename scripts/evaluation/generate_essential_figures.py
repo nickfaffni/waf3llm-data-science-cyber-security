@@ -51,8 +51,8 @@ EXCLUDE_COLS = {'Label', 'Category', 'Technique', 'URL', 'HTML_Content', 'Source
 # Load Datasets & Models
 # ============================================================
 print("Loading datasets...")
-train_df = pd.read_csv(DATA_DIR / 'features_train_10000_r20.csv')
-test_df = pd.read_csv(DATA_DIR / 'features_test_10000_r20.csv')
+train_df = pd.read_csv(DATA_DIR / 'features_train.csv')
+test_df = pd.read_csv(DATA_DIR / 'features_test.csv')
 
 feature_cols = [c for c in train_df.columns if c not in EXCLUDE_COLS]
 X_test = test_df[feature_cols].fillna(0)
@@ -60,11 +60,11 @@ y_test = test_df['Label']
 
 print("Loading models...")
 models = {
-    'Random Forest': joblib.load(MODELS_DIR / 'rf_model_10000_r20.joblib'),
-    'XGBoost (Baseline)': joblib.load(MODELS_DIR / 'xgb_baseline_10000_r20.joblib'),
-    'XGBoost (Tuned)': joblib.load(MODELS_DIR / 'xgb_tuned_10000_r20.joblib'),
-    'Logistic Regression': joblib.load(MODELS_DIR / 'lr_model_10000_r20.joblib'),
-    'Weighted Soft Vote': joblib.load(MODELS_DIR / 'weighted_ensemble_10000_r20.joblib'),
+    'Random Forest': joblib.load(MODELS_DIR / 'rf_model.joblib'),
+    'XGBoost (Baseline)': joblib.load(MODELS_DIR / 'xgb_baseline.joblib'),
+    'XGBoost (Tuned)': joblib.load(MODELS_DIR / 'xgb_tuned.joblib'),
+    'Logistic Regression': joblib.load(MODELS_DIR / 'lr_model.joblib'),
+    'Weighted Soft Vote': joblib.load(MODELS_DIR / 'weighted_ensemble.joblib'),
 }
 
 # ============================================================

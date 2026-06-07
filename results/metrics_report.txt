@@ -1,0 +1,63 @@
+DS4CS Model Evaluation Report (v2)
+========================================
+
+Model: Random Forest
+  Accuracy  : 0.8013
+  Precision : 0.5714
+  Recall    : 0.0267
+  TPR       : 0.0267
+  FPR       : 0.0050
+  F1_Score  : 0.0510
+  PR_AUC    : 0.3843
+  ROC_AUC   : 0.7019
+
+Model: XGBoost (baseline)
+  Accuracy  : 0.8067
+  Precision : 0.5263
+  Recall    : 0.3333
+  TPR       : 0.3333
+  FPR       : 0.0750
+  F1_Score  : 0.4082
+  PR_AUC    : 0.4568
+  ROC_AUC   : 0.7095
+
+Model: XGBoost (tuned)
+  Accuracy  : 0.5520
+  Precision : 0.2663
+  Recall    : 0.7067
+  TPR       : 0.7067
+  FPR       : 0.4867
+  F1_Score  : 0.3869
+  PR_AUC    : 0.3496
+  ROC_AUC   : 0.6709
+
+Model: Logistic Regression
+  Accuracy  : 0.3920
+  Precision : 0.2080
+  Recall    : 0.7267
+  TPR       : 0.7267
+  FPR       : 0.6917
+  F1_Score  : 0.3234
+  PR_AUC    : 0.2236
+  ROC_AUC   : 0.5389
+
+Model: Hard-OR Ensemble
+  Accuracy  : 0.5520
+  Precision : 0.2675
+  Recall    : 0.7133
+  TPR       : 0.7133
+  FPR       : 0.4883
+  F1_Score  : 0.3891
+  PR_AUC    : 0.3514
+  ROC_AUC   : 0.6732
+
+Model: Weighted Soft Vote
+  Accuracy  : 0.8093
+  Precision : 0.5946
+  Recall    : 0.1467
+  TPR       : 0.1467
+  FPR       : 0.0250
+  F1_Score  : 0.2353
+  PR_AUC    : 0.3895
+  ROC_AUC   : 0.7025
+

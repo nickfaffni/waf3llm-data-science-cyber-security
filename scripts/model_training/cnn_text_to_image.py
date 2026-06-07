@@ -104,8 +104,8 @@ class HTMLCNN(nn.Module):
 def main():
     print(f"=== CNN Training on {DEVICE} ===")
     
-    train_file = DATA_DIR / 'train_real_html_10000_r20.csv'
-    test_file = DATA_DIR / 'test_real_html_10000_r20.csv'
+    train_file = DATA_DIR / 'train_real_html.csv'
+    test_file = DATA_DIR / 'test_real_html.csv'
     
     if not train_file.exists() or not test_file.exists():
         print("Error: train/test files not found. Run Phase 1 generation first.")
@@ -185,7 +185,7 @@ def main():
     print(f"  F1-Score  : {f1:.4f}")
     
     # Save Model state
-    model_path = MODELS_DIR / 'cnn_model_10000_r20.pt'
+    model_path = MODELS_DIR / 'cnn_model.pt'
     torch.save(model.state_dict(), model_path)
     print(f"\nSaved PyTorch CNN weights to {model_path}")
     

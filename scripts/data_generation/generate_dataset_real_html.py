@@ -43,7 +43,7 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 # Step 1: Source Benign Data (Real HTML from C4/Common Crawl)
 # ============================================================
 def collect_benign_samples(num_benign):
-    benign_path = DATA_DIR / f'benign_real_html_{num_benign}.csv'
+    benign_path = DATA_DIR / f'benign_real_html.csv'
     
     if benign_path.exists():
         print(f'Loading base benign samples from cache: {benign_path}')
@@ -392,10 +392,10 @@ def main():
     ratio_pct = int(ratio * 100)
     
     # Filenames
-    train_filename = f'train_real_html_{num_benign}_r{ratio_pct}.csv'
-    test_filename = f'test_real_html_{num_benign}_r{ratio_pct}.csv'
-    full_filename = f'final_dataset_real_html_{num_benign}_r{ratio_pct}.csv'
-    sample_filename = f'sample_real_html_{num_benign}_r{ratio_pct}.csv'
+    train_filename = f'train_real_html.csv'
+    test_filename = f'test_real_html.csv'
+    full_filename = f'final_dataset_real_html.csv'
+    sample_filename = f'sample_real_html.csv'
     
     train_path = DATA_DIR / train_filename
     test_path = DATA_DIR / test_filename

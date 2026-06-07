@@ -313,8 +313,8 @@ def main():
     print(f'  Dataset: {num_benign} benign, ratio {ratio_pct}%')
 
     # Load raw HTML data
-    train_file = DATA_DIR / f'train_real_html_{num_benign}_r{ratio_pct}.csv'
-    test_file = DATA_DIR / f'test_real_html_{num_benign}_r{ratio_pct}.csv'
+    train_file = DATA_DIR / f'train_real_html.csv'
+    test_file = DATA_DIR / f'test_real_html.csv'
 
     if not train_file.exists():
         print(f'Error: {train_file} not found.')
@@ -391,7 +391,7 @@ def main():
         print(f'  Eval — Acc: {acc:.4f}  Prec: {prec:.4f}  Rec: {rec:.4f}  F1: {f1:.4f}  AUC: {auc:.4f}')
 
     # Save model
-    model_save_path = MODELS_DIR / f'layoutlm_{num_benign}_r{ratio_pct}'
+    model_save_path = MODELS_DIR / f'layoutlm'
     model.save_pretrained(model_save_path)
     tokenizer.save_pretrained(model_save_path)
     print(f'\nSaved LayoutLMv3 model → {model_save_path}')
@@ -417,7 +417,7 @@ def main():
         'Test_Samples': len(test_htmls),
     }
 
-    report_path = RESULTS_DIR / f'layoutlm_metrics_{num_benign}_r{ratio_pct}.json'
+    report_path = RESULTS_DIR / f'layoutlm_metrics.json'
     with open(report_path, 'w') as f:
         json.dump(report, f, indent=2)
     print(f'Saved LayoutLMv3 report → {report_path}')

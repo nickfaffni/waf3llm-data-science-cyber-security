@@ -313,8 +313,8 @@ def main():
     num_benign = args.num_benign
     ratio_pct = int(args.ratio * 100)
 
-    train_file = DATA_DIR / f'features_train_{num_benign}_r{ratio_pct}.csv'
-    test_file = DATA_DIR / f'features_test_{num_benign}_r{ratio_pct}.csv'
+    train_file = DATA_DIR / f'features_train.csv'
+    test_file = DATA_DIR / f'features_test.csv'
 
     if not train_file.exists():
         print(f'Feature matrices not found: {train_file}. Run Phase 2 extraction first.')
@@ -357,8 +357,8 @@ def main():
     rf.fit(X_train, y_train)
     rf_metrics, rf_pred, _ = evaluate('Random Forest', rf, X_test, y_test)
     results.append(rf_metrics)
-    plot_confusion('Random Forest', y_test, rf_pred, f'rf_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(rf, MODELS_DIR / f'rf_model_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('Random Forest', y_test, rf_pred, f'rf_confusion_matrix.png')
+    joblib.dump(rf, MODELS_DIR / f'rf_model.joblib')
     cv_score('Random Forest', rf, X_train, y_train)
     rf_categories = per_category_recall('Random Forest', y_test, rf_pred, category_test)
 
@@ -378,8 +378,8 @@ def main():
     xgb_baseline.fit(X_train, y_train)
     base_metrics, base_pred, _ = evaluate('XGBoost (baseline)', xgb_baseline, X_test, y_test)
     results.append(base_metrics)
-    plot_confusion('XGBoost (baseline)', y_test, base_pred, f'xgb_baseline_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(xgb_baseline, MODELS_DIR / f'xgb_baseline_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('XGBoost (baseline)', y_test, base_pred, f'xgb_baseline_confusion_matrix.png')
+    joblib.dump(xgb_baseline, MODELS_DIR / f'xgb_baseline.joblib')
     cv_score('XGBoost (baseline)', xgb_baseline, X_train, y_train)
 
     # 3. XGBoost (tuned) ---------------------------------------------------
@@ -405,12 +405,12 @@ def main():
     print(f'  Best params: {xgb_search.best_params_}')
     tuned_metrics, tuned_pred, tuned_score = evaluate('XGBoost (tuned)', xgb_tuned, X_test, y_test)
     results.append(tuned_metrics)
-    plot_confusion('XGBoost (tuned)', y_test, tuned_pred, f'xgb_tuned_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(xgb_tuned, MODELS_DIR / f'xgb_tuned_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('XGBoost (tuned)', y_test, tuned_pred, f'xgb_tuned_confusion_matrix.png')
+    joblib.dump(xgb_tuned, MODELS_DIR / f'xgb_tuned.joblib')
     xgb_categories = per_category_recall('XGBoost (tuned)', y_test, tuned_pred, category_test)
 
     # Fix C: PR curve + threshold sweep on tuned XGB
-    plot_pr_curve('XGBoost (tuned)', y_test, tuned_score, f'xgb_tuned_pr_curve_{num_benign}_r{ratio_pct}.png')
+    plot_pr_curve('XGBoost (tuned)', y_test, tuned_score, f'xgb_tuned_pr_curve.png')
     threshold_table = threshold_sweep('XGBoost (tuned)', y_test, tuned_score)
 
     # 4. Logistic Regression -----------------------------------------------
@@ -422,8 +422,8 @@ def main():
     lr.fit(X_train, y_train)
     lr_metrics, lr_pred, _ = evaluate('Logistic Regression', lr, X_test, y_test)
     results.append(lr_metrics)
-    plot_confusion('Logistic Regression', y_test, lr_pred, f'lr_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(lr, MODELS_DIR / f'lr_model_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('Logistic Regression', y_test, lr_pred, f'lr_confusion_matrix.png')
+    joblib.dump(lr, MODELS_DIR / f'lr_model.joblib')
 
     # 4b. Naive Bayes ------------------------------------------------------
     print('\n>>> Naive Bayes')
@@ -434,8 +434,8 @@ def main():
     nb.fit(X_train, y_train)
     nb_metrics, nb_pred, _ = evaluate('Naive Bayes', nb, X_test, y_test)
     results.append(nb_metrics)
-    plot_confusion('Naive Bayes', y_test, nb_pred, f'nb_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(nb, MODELS_DIR / f'nb_model_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('Naive Bayes', y_test, nb_pred, f'nb_confusion_matrix.png')
+    joblib.dump(nb, MODELS_DIR / f'nb_model.joblib')
 
     # 4c. Support Vector Machine (SVM) -------------------------------------
     print('\n>>> Support Vector Machine (SVM)')
@@ -446,8 +446,8 @@ def main():
     svm.fit(X_train, y_train)
     svm_metrics, svm_pred, _ = evaluate('SVM', svm, X_test, y_test)
     results.append(svm_metrics)
-    plot_confusion('SVM', y_test, svm_pred, f'svm_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(svm, MODELS_DIR / f'svm_model_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('SVM', y_test, svm_pred, f'svm_confusion_matrix.png')
+    joblib.dump(svm, MODELS_DIR / f'svm_model.joblib')
 
     # 4d. K-Nearest Neighbors (KNN) ----------------------------------------
     print('\n>>> K-Nearest Neighbors (KNN)')
@@ -458,8 +458,8 @@ def main():
     knn.fit(X_train, y_train)
     knn_metrics, knn_pred, _ = evaluate('KNN', knn, X_test, y_test)
     results.append(knn_metrics)
-    plot_confusion('KNN', y_test, knn_pred, f'knn_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(knn, MODELS_DIR / f'knn_model_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('KNN', y_test, knn_pred, f'knn_confusion_matrix.png')
+    joblib.dump(knn, MODELS_DIR / f'knn_model.joblib')
 
     # 4e. Artificial Neural Network (ANN) ----------------------------------
     print('\n>>> Artificial Neural Network (ANN)')
@@ -470,8 +470,8 @@ def main():
     ann.fit(X_train, y_train)
     ann_metrics, ann_pred, _ = evaluate('ANN', ann, X_test, y_test)
     results.append(ann_metrics)
-    plot_confusion('ANN', y_test, ann_pred, f'ann_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(ann, MODELS_DIR / f'ann_model_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('ANN', y_test, ann_pred, f'ann_confusion_matrix.png')
+    joblib.dump(ann, MODELS_DIR / f'ann_model.joblib')
 
     # 4f. Deep Neural Network (DNN) -----------------------------------------
     print('\n>>> Deep Neural Network (DNN)')
@@ -482,8 +482,8 @@ def main():
     dnn.fit(X_train, y_train)
     dnn_metrics, dnn_pred, _ = evaluate('DNN', dnn, X_test, y_test)
     results.append(dnn_metrics)
-    plot_confusion('DNN', y_test, dnn_pred, f'dnn_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(dnn, MODELS_DIR / f'dnn_model_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('DNN', y_test, dnn_pred, f'dnn_confusion_matrix.png')
+    joblib.dump(dnn, MODELS_DIR / f'dnn_model.joblib')
 
 
     # 5. Hard-OR ensemble (recall-maximizing) ------------------------------
@@ -503,8 +503,8 @@ def main():
     or_ens.fit(X_train, y_train)
     or_metrics, or_pred, _ = evaluate('Hard-OR Ensemble', or_ens, X_test, y_test)
     results.append(or_metrics)
-    plot_confusion('Hard-OR Ensemble', y_test, or_pred, f'or_ensemble_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(or_ens, MODELS_DIR / f'or_ensemble_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('Hard-OR Ensemble', y_test, or_pred, f'or_ensemble_confusion_matrix.png')
+    joblib.dump(or_ens, MODELS_DIR / f'or_ensemble.joblib')
 
     # 6. Weighted soft-voting ensemble (weights ∝ tuned-model PR-AUC) ------
     print('\n>>> Weighted Soft-Voting Ensemble (weights ∝ PR-AUC)')
@@ -536,8 +536,8 @@ def main():
     weighted.fit(X_train, y_train)
     w_metrics, w_pred, _ = evaluate('Weighted Soft Vote', weighted, X_test, y_test)
     results.append(w_metrics)
-    plot_confusion('Weighted Soft Vote', y_test, w_pred, f'weighted_ensemble_confusion_matrix_{num_benign}_r{ratio_pct}.png')
-    joblib.dump(weighted, MODELS_DIR / f'weighted_ensemble_{num_benign}_r{ratio_pct}.joblib')
+    plot_confusion('Weighted Soft Vote', y_test, w_pred, f'weighted_ensemble_confusion_matrix.png')
+    joblib.dump(weighted, MODELS_DIR / f'weighted_ensemble.joblib')
 
     # 7a. Per-technique recall on the held-out test set (model trained on all 14 techniques) ----
     recall_by_technique = {}
@@ -571,7 +571,7 @@ def main():
     )
 
     # 8. Write summary -----------------------------------------------------
-    report_path = RESULTS_DIR / f'metrics_report_{num_benign}_r{ratio_pct}.txt'
+    report_path = RESULTS_DIR / f'metrics_report.txt'
     with open(report_path, 'w') as f:
         f.write(f'DS4CS Model Evaluation Report ({num_benign} benign, ratio {ratio_pct}%)\n')
         f.write('=' * 40 + '\n\n')
@@ -582,7 +582,7 @@ def main():
             f.write('\n')
     print(f'\nSaved metrics report → {report_path}')
 
-    json_path = RESULTS_DIR / f'metrics_report_{num_benign}_r{ratio_pct}.json'
+    json_path = RESULTS_DIR / f'metrics_report.json'
     with open(json_path, 'w') as f:
         json.dump({
             'models': results,
@@ -601,19 +601,19 @@ def main():
         import shutil
         shutil.copyfile(report_path, RESULTS_DIR / 'metrics_report.txt')
         shutil.copyfile(json_path, RESULTS_DIR / 'metrics_report.json')
-        shutil.copyfile(MODELS_DIR / f'rf_model_{num_benign}_r{ratio_pct}.joblib', MODELS_DIR / 'rf_model.joblib')
-        shutil.copyfile(MODELS_DIR / f'xgb_baseline_{num_benign}_r{ratio_pct}.joblib', MODELS_DIR / 'xgb_baseline.joblib')
-        shutil.copyfile(MODELS_DIR / f'xgb_tuned_{num_benign}_r{ratio_pct}.joblib', MODELS_DIR / 'xgb_tuned.joblib')
-        shutil.copyfile(MODELS_DIR / f'lr_model_{num_benign}_r{ratio_pct}.joblib', MODELS_DIR / 'lr_model.joblib')
-        shutil.copyfile(MODELS_DIR / f'or_ensemble_{num_benign}_r{ratio_pct}.joblib', MODELS_DIR / 'or_ensemble.joblib')
-        shutil.copyfile(MODELS_DIR / f'weighted_ensemble_{num_benign}_r{ratio_pct}.joblib', MODELS_DIR / 'weighted_ensemble.joblib')
-        shutil.copyfile(RESULTS_DIR / f'rf_confusion_matrix_{num_benign}_r{ratio_pct}.png', RESULTS_DIR / 'rf_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'xgb_baseline_confusion_matrix_{num_benign}_r{ratio_pct}.png', RESULTS_DIR / 'xgb_baseline_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'xgb_tuned_confusion_matrix_{num_benign}_r{ratio_pct}.png', RESULTS_DIR / 'xgb_tuned_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'lr_confusion_matrix_{num_benign}_r{ratio_pct}.png', RESULTS_DIR / 'lr_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'or_ensemble_confusion_matrix_{num_benign}_r{ratio_pct}.png', RESULTS_DIR / 'or_ensemble_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'weighted_ensemble_confusion_matrix_{num_benign}_r{ratio_pct}.png', RESULTS_DIR / 'weighted_ensemble_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'xgb_tuned_pr_curve_{num_benign}_r{ratio_pct}.png', RESULTS_DIR / 'xgb_tuned_pr_curve.png')
+        shutil.copyfile(MODELS_DIR / f'rf_model.joblib', MODELS_DIR / 'rf_model.joblib')
+        shutil.copyfile(MODELS_DIR / f'xgb_baseline.joblib', MODELS_DIR / 'xgb_baseline.joblib')
+        shutil.copyfile(MODELS_DIR / f'xgb_tuned.joblib', MODELS_DIR / 'xgb_tuned.joblib')
+        shutil.copyfile(MODELS_DIR / f'lr_model.joblib', MODELS_DIR / 'lr_model.joblib')
+        shutil.copyfile(MODELS_DIR / f'or_ensemble.joblib', MODELS_DIR / 'or_ensemble.joblib')
+        shutil.copyfile(MODELS_DIR / f'weighted_ensemble.joblib', MODELS_DIR / 'weighted_ensemble.joblib')
+        shutil.copyfile(RESULTS_DIR / f'rf_confusion_matrix.png', RESULTS_DIR / 'rf_confusion_matrix.png')
+        shutil.copyfile(RESULTS_DIR / f'xgb_baseline_confusion_matrix.png', RESULTS_DIR / 'xgb_baseline_confusion_matrix.png')
+        shutil.copyfile(RESULTS_DIR / f'xgb_tuned_confusion_matrix.png', RESULTS_DIR / 'xgb_tuned_confusion_matrix.png')
+        shutil.copyfile(RESULTS_DIR / f'lr_confusion_matrix.png', RESULTS_DIR / 'lr_confusion_matrix.png')
+        shutil.copyfile(RESULTS_DIR / f'or_ensemble_confusion_matrix.png', RESULTS_DIR / 'or_ensemble_confusion_matrix.png')
+        shutil.copyfile(RESULTS_DIR / f'weighted_ensemble_confusion_matrix.png', RESULTS_DIR / 'weighted_ensemble_confusion_matrix.png')
+        shutil.copyfile(RESULTS_DIR / f'xgb_tuned_pr_curve.png', RESULTS_DIR / 'xgb_tuned_pr_curve.png')
         print("Saved backward-compatible reports and artifacts.")
 
     print('\nPhase 3 Complete.')

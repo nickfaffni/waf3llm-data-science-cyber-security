@@ -160,16 +160,16 @@ def main():
     num_benign = args.num_benign
     ratio_pct = int(args.ratio * 100)
 
-    pipeline_path = MODELS_DIR / f'semantic_pipeline_{num_benign}_r{ratio_pct}.joblib'
+    pipeline_path = MODELS_DIR / f'semantic_pipeline.joblib'
     if not pipeline_path.exists():
         raise SystemExit(f'Missing {pipeline_path}. Run extract_features.py first.')
     pipeline = joblib.load(pipeline_path)
 
     models_to_evaluate = {
-        'xgb_baseline': f'xgb_baseline_{num_benign}_r{ratio_pct}.joblib',
-        'xgb_tuned': f'xgb_tuned_{num_benign}_r{ratio_pct}.joblib',
-        'rf': f'rf_model_{num_benign}_r{ratio_pct}.joblib',
-        'or_ensemble': f'or_ensemble_{num_benign}_r{ratio_pct}.joblib',
+        'xgb_baseline': f'xgb_baseline.joblib',
+        'xgb_tuned': f'xgb_tuned.joblib',
+        'rf': f'rf_model.joblib',
+        'or_ensemble': f'or_ensemble.joblib',
     }
 
     print(f'\n=== OOD Evaluation (Benign: {num_benign}, Ratio: {ratio_pct}%) ===')
@@ -178,11 +178,11 @@ def main():
     nat_pairs = load_natural_benign()
 
     # Load Isolation Forest if exists
-    iso_path = MODELS_DIR / f'isolation_forest_{num_benign}_r{ratio_pct}.joblib'
+    iso_path = MODELS_DIR / f'isolation_forest.joblib'
     iso = joblib.load(iso_path) if iso_path.exists() else None
 
     # Load Transformer Embedder if config exists
-    sbert_config_path = MODELS_DIR / f'sbert_config_{num_benign}_r{ratio_pct}.joblib'
+    sbert_config_path = MODELS_DIR / f'sbert_config.joblib'
     sbert_embedder = None
     if sbert_config_path.exists():
         from transformer_embeddings import TransformerEmbedder
@@ -230,11 +230,11 @@ def main():
             print(f'      {source:40s}  flagged={info["flagged_rate"]:.2f}{tick}')
         full_report['natural_benign'][name] = nat_metrics
 
-    json_path = RESULTS_DIR / f'ood_evaluation_{num_benign}_r{ratio_pct}.json'
+    json_path = RESULTS_DIR / f'ood_evaluation.json'
     with open(json_path, 'w') as f:
         json.dump(full_report, f, indent=2)
 
-    txt_path = RESULTS_DIR / f'ood_evaluation_{num_benign}_r{ratio_pct}.txt'
+    txt_path = RESULTS_DIR / f'ood_evaluation.txt'
     with open(txt_path, 'w') as f:
         f.write(f'DS4CS OOD Evaluation Report ({num_benign} benign, ratio {ratio_pct}%)\n')
         f.write('=' * 40 + '\n\n')

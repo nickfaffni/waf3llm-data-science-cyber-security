@@ -88,15 +88,15 @@ def main():
     jaccard = joblib.load(jaccard_path)
 
     # Load Tuned XGBoost Model
-    xgb_path = MODELS_DIR / 'xgb_tuned_10000_r20.joblib'
+    xgb_path = MODELS_DIR / 'xgb_tuned.joblib'
     if not xgb_path.exists():
         print(f"Error: Tuned XGBoost not found at {xgb_path}. Train models first.")
         sys.exit(1)
     xgb = joblib.load(xgb_path)
 
     # Load test dataset
-    test_file = DATA_DIR / 'test_real_html_10000_r20.csv'
-    features_test_file = DATA_DIR / 'features_test_10000_r20.csv'
+    test_file = DATA_DIR / 'test_real_html.csv'
+    features_test_file = DATA_DIR / 'features_test.csv'
     
     if not test_file.exists() or not features_test_file.exists():
         print("Error: test sets missing.")

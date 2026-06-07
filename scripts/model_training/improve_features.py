@@ -25,8 +25,8 @@ EXCLUDE_COLS = {'Label', 'Category', 'Technique', 'URL', 'HTML_Content', 'Source
 
 
 def improve_dataset(num_benign, ratio_pct):
-    train_path = DATA_DIR / f'features_train_{num_benign}_r{ratio_pct}.csv'
-    test_path = DATA_DIR / f'features_test_{num_benign}_r{ratio_pct}.csv'
+    train_path = DATA_DIR / f'features_train.csv'
+    test_path = DATA_DIR / f'features_test.csv'
 
     if not train_path.exists() or not test_path.exists():
         print(f"Skipping {num_benign}_r{ratio_pct} (files not found).")
@@ -50,7 +50,7 @@ def improve_dataset(num_benign, ratio_pct):
     clf.fit(X_train_benign)
 
     # Save Isolation Forest model
-    iso_model_path = MODELS_DIR / f'isolation_forest_{num_benign}_r{ratio_pct}.joblib'
+    iso_model_path = MODELS_DIR / f'isolation_forest.joblib'
     joblib.dump(clf, iso_model_path)
     print(f"  Saved Isolation Forest model to {iso_model_path}")
 

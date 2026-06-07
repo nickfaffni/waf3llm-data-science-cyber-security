@@ -134,8 +134,8 @@ class JaccardClassifier:
 def main():
     print("=== Phase 3: Jaccard Similarity Classifier ===")
     
-    train_file = DATA_DIR / 'train_real_html_10000_r20.csv'
-    test_file = DATA_DIR / 'test_real_html_10000_r20.csv'
+    train_file = DATA_DIR / 'train_real_html.csv'
+    test_file = DATA_DIR / 'test_real_html.csv'
     
     if not train_file.exists() or not test_file.exists():
         print("Error: train/test HTML datasets missing. Generate them first.")

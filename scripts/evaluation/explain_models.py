@@ -34,7 +34,7 @@ def main():
     print("=== Phase 4: Explainable AI (SHAP Analysis) ===")
 
     # Load Tuned XGBoost model
-    model_path = MODELS_DIR / 'xgb_tuned_10000_r20.joblib'
+    model_path = MODELS_DIR / 'xgb_tuned.joblib'
     if not model_path.exists():
         print(f"Error: Model not found at {model_path}. Train models first.")
         sys.exit(1)
@@ -43,7 +43,7 @@ def main():
     model = joblib.load(model_path)
 
     # Load test features
-    test_file = DATA_DIR / 'features_test_10000_r20.csv'
+    test_file = DATA_DIR / 'features_test.csv'
     if not test_file.exists():
         print(f"Error: Feature matrix not found: {test_file}.")
         sys.exit(1)

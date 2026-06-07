@@ -36,7 +36,7 @@ def main():
     print("=== Phase 3: Unsupervised Clustering & Visualization ===")
 
     # Load 10,000 dataset (r20) features
-    train_file = DATA_DIR / 'features_train_10000_r20.csv'
+    train_file = DATA_DIR / 'features_train.csv'
     if not train_file.exists():
         print(f"Error: Feature matrix not found: {train_file}. Run extract_features.py first.")
         sys.exit(1)

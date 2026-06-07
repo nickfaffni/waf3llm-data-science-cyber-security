@@ -485,8 +485,8 @@ def main():
     num_benign = args.num_benign
     ratio_pct = int(args.ratio * 100)
 
-    train_file = DATA_DIR / f'train_real_html_{num_benign}_r{ratio_pct}.csv'
-    test_file = DATA_DIR / f'test_real_html_{num_benign}_r{ratio_pct}.csv'
+    train_file = DATA_DIR / f'train_real_html.csv'
+    test_file = DATA_DIR / f'test_real_html.csv'
 
     if not train_file.exists():
         print(f'Train file not found: {train_file}. Run Phase 1 data generation first.')
@@ -507,7 +507,7 @@ def main():
     else:
         print('Using MinHash pipeline (no SVD explained variance to display).')
 
-    pipeline_path = MODELS_DIR / f'semantic_pipeline_{num_benign}_r{ratio_pct}.joblib'
+    pipeline_path = MODELS_DIR / f'semantic_pipeline.joblib'
     joblib.dump(pipeline, pipeline_path)
     print(f'Saved semantic pipeline to {pipeline_path}')
 
@@ -535,7 +535,7 @@ def main():
 
         # Save the embedder config for inference reuse
         joblib.dump({'model_name': embedder.model_name, 'embed_dim': EMBED_DIM},
-                    MODELS_DIR / f'sbert_config_{num_benign}_r{ratio_pct}.joblib')
+                    MODELS_DIR / f'sbert_config.joblib')
     else:
         print('\n(Skipping transformer embeddings — --skip-transformer flag set)')
 
@@ -552,8 +552,8 @@ def main():
     df_train_final = pd.concat(parts_train, axis=1)
     df_test_final = pd.concat(parts_test, axis=1)
 
-    out_train = DATA_DIR / f'features_train_{num_benign}_r{ratio_pct}.csv'
-    out_test = DATA_DIR / f'features_test_{num_benign}_r{ratio_pct}.csv'
+    out_train = DATA_DIR / f'features_train.csv'
+    out_test = DATA_DIR / f'features_test.csv'
     df_train_final.to_csv(out_train, index=False)
     df_test_final.to_csv(out_test, index=False)
     print(f'\nSaved: {out_train} (Shape: {df_train_final.shape})')

@@ -1,0 +1,310 @@
+{
+  "models": [
+    {
+      "Model": "Random Forest",
+      "Accuracy": 0.8013333333333333,
+      "Precision": 0.5714285714285714,
+      "Recall": 0.02666666666666667,
+      "TPR": 0.02666666666666667,
+      "FPR": 0.005,
+      "F1_Score": 0.050955414012738856,
+      "PR_AUC": 0.38430797935004735,
+      "ROC_AUC": 0.7018777777777778
+    },
+    {
+      "Model": "XGBoost (baseline)",
+      "Accuracy": 0.8066666666666666,
+      "Precision": 0.5263157894736842,
+      "Recall": 0.3333333333333333,
+      "TPR": 0.3333333333333333,
+      "FPR": 0.075,
+      "F1_Score": 0.40816326530612246,
+      "PR_AUC": 0.45684347473742404,
+      "ROC_AUC": 0.7094611111111111
+    },
+    {
+      "Model": "XGBoost (tuned)",
+      "Accuracy": 0.552,
+      "Precision": 0.2663316582914573,
+      "Recall": 0.7066666666666667,
+      "TPR": 0.7066666666666667,
+      "FPR": 0.4866666666666667,
+      "F1_Score": 0.38686131386861317,
+      "PR_AUC": 0.3495829209444269,
+      "ROC_AUC": 0.6708833333333333
+    },
+    {
+      "Model": "Logistic Regression",
+      "Accuracy": 0.392,
+      "Precision": 0.20801526717557253,
+      "Recall": 0.7266666666666667,
+      "TPR": 0.7266666666666667,
+      "FPR": 0.6916666666666667,
+      "F1_Score": 0.32344213649851633,
+      "PR_AUC": 0.22358262347193625,
+      "ROC_AUC": 0.5389333333333333
+    },
+    {
+      "Model": "Hard-OR Ensemble",
+      "Accuracy": 0.552,
+      "Precision": 0.2675,
+      "Recall": 0.7133333333333334,
+      "TPR": 0.7133333333333334,
+      "FPR": 0.48833333333333334,
+      "F1_Score": 0.3890909090909091,
+      "PR_AUC": 0.35143039785488084,
+      "ROC_AUC": 0.6731611111111112
+    },
+    {
+      "Model": "Weighted Soft Vote",
+      "Accuracy": 0.8093333333333333,
+      "Precision": 0.5945945945945946,
+      "Recall": 0.14666666666666667,
+      "TPR": 0.14666666666666667,
+      "FPR": 0.025,
+      "F1_Score": 0.23529411764705882,
+      "PR_AUC": 0.38949932589518127,
+      "ROC_AUC": 0.7024777777777779
+    }
+  ],
+  "per_category_recall": {
+    "RandomForest": {
+      "CSS_Injection": {
+        "n": 18,
+        "recall": 0.05555555555555555
+      },
+      "Camouflage_Comment": {
+        "n": 21,
+        "recall": 0.0
+      },
+      "Context_Injection": {
+        "n": 9,
+        "recall": 0.1111111111111111
+      },
+      "Data_Exfiltration_Attempt": {
+        "n": 12,
+        "recall": 0.0
+      },
+      "Direct_Override": {
+        "n": 8,
+        "recall": 0.0
+      },
+      "Encoding_Obfuscation": {
+        "n": 10,
+        "recall": 0.0
+      },
+      "Hidden_Attribute": {
+        "n": 20,
+        "recall": 0.05
+      },
+      "JavaScript_Event": {
+        "n": 20,
+        "recall": 0.0
+      },
+      "Roleplay_Injection": {
+        "n": 16,
+        "recall": 0.0625
+      },
+      "Script_Tag_Obfuscation": {
+        "n": 16,
+        "recall": 0.0
+      }
+    },
+    "XGBoostTuned": {
+      "CSS_Injection": {
+        "n": 18,
+        "recall": 0.8888888888888888
+      },
+      "Camouflage_Comment": {
+        "n": 21,
+        "recall": 0.7142857142857143
+      },
+      "Context_Injection": {
+        "n": 9,
+        "recall": 0.5555555555555556
+      },
+      "Data_Exfiltration_Attempt": {
+        "n": 12,
+        "recall": 0.75
+      },
+      "Direct_Override": {
+        "n": 8,
+        "recall": 0.5
+      },
+      "Encoding_Obfuscation": {
+        "n": 10,
+        "recall": 0.7
+      },
+      "Hidden_Attribute": {
+        "n": 20,
+        "recall": 0.5
+      },
+      "JavaScript_Event": {
+        "n": 20,
+        "recall": 0.85
+      },
+      "Roleplay_Injection": {
+        "n": 16,
+        "recall": 0.9375
+      },
+      "Script_Tag_Obfuscation": {
+        "n": 16,
+        "recall": 0.5
+      }
+    }
+  },
+  "recall_by_technique_xgb_tuned": {
+    "position_offscreen": {
+      "n": 9,
+      "recall": 0.7777777777777778
+    },
+    "hidden_input": {
+      "n": 12,
+      "recall": 0.6666666666666666
+    },
+    "svg_onload": {
+      "n": 13,
+      "recall": 0.7692307692307693
+    },
+    "zero_size_div": {
+      "n": 13,
+      "recall": 1.0
+    },
+    "data_uri_img": {
+      "n": 17,
+      "recall": 0.4117647058823529
+    },
+    "anchor_js": {
+      "n": 13,
+      "recall": 0.9230769230769231
+    },
+    "opacity_zero_div": {
+      "n": 9,
+      "recall": 0.7777777777777778
+    },
+    "script_text_plain": {
+      "n": 11,
+      "recall": 0.2727272727272727
+    },
+    "display_none_div": {
+      "n": 9,
+      "recall": 0.8888888888888888
+    },
+    "visibility_hidden_div": {
+      "n": 11,
+      "recall": 1.0
+    },
+    "html_comment": {
+      "n": 6,
+      "recall": 0.3333333333333333
+    },
+    "meta_tag": {
+      "n": 12,
+      "recall": 0.5833333333333334
+    },
+    "body_onload": {
+      "n": 7,
+      "recall": 0.5714285714285714
+    },
+    "noscript_tag": {
+      "n": 8,
+      "recall": 0.875
+    }
+  },
+  "true_leave_one_technique_out_xgb_tuned": {
+    "anchor_js": {
+      "n_test": 13,
+      "recall_on_held_out": 0.5384615384615384
+    },
+    "body_onload": {
+      "n_test": 7,
+      "recall_on_held_out": 0.42857142857142855
+    },
+    "data_uri_img": {
+      "n_test": 17,
+      "recall_on_held_out": 0.4117647058823529
+    },
+    "display_none_div": {
+      "n_test": 9,
+      "recall_on_held_out": 0.8888888888888888
+    },
+    "hidden_input": {
+      "n_test": 12,
+      "recall_on_held_out": 0.5833333333333334
+    },
+    "html_comment": {
+      "n_test": 6,
+      "recall_on_held_out": 0.3333333333333333
+    },
+    "meta_tag": {
+      "n_test": 12,
+      "recall_on_held_out": 0.6666666666666666
+    },
+    "noscript_tag": {
+      "n_test": 8,
+      "recall_on_held_out": 0.75
+    },
+    "opacity_zero_div": {
+      "n_test": 9,
+      "recall_on_held_out": 0.5555555555555556
+    },
+    "position_offscreen": {
+      "n_test": 9,
+      "recall_on_held_out": 0.5555555555555556
+    },
+    "script_text_plain": {
+      "n_test": 11,
+      "recall_on_held_out": 0.2727272727272727
+    },
+    "svg_onload": {
+      "n_test": 13,
+      "recall_on_held_out": 0.38461538461538464
+    },
+    "visibility_hidden_div": {
+      "n_test": 11,
+      "recall_on_held_out": 0.9090909090909091
+    },
+    "zero_size_div": {
+      "n_test": 13,
+      "recall_on_held_out": 0.8461538461538461
+    },
+    "_mean": 0.5803370299168619
+  },
+  "threshold_sweep_xgb_tuned": [
+    {
+      "target_recall": 0.5,
+      "threshold": 0.5383413434028625,
+      "precision": 0.30120481927710846,
+      "recall": 0.5,
+      "fpr": 0.29
+    },
+    {
+      "target_recall": 0.7,
+      "threshold": 0.5025717616081238,
+      "precision": 0.2706185567010309,
+      "recall": 0.7,
+      "fpr": 0.4716666666666667
+    },
+    {
+      "target_recall": 0.8,
+      "threshold": 0.46776461601257324,
+      "precision": 0.2631578947368421,
+      "recall": 0.8,
+      "fpr": 0.56
+    },
+    {
+      "target_recall": 0.9,
+      "threshold": 0.3903290033340454,
+      "precision": 0.251865671641791,
+      "recall": 0.9,
+      "fpr": 0.6683333333333333
+    },
+    {
+      "target_recall": 0.95,
+      "threshold": 0.29697489738464355,
+      "precision": 0.23597359735973597,
+      "recall": 0.9533333333333334,
+      "fpr": 0.7716666666666666
+    }
+  ]
+}

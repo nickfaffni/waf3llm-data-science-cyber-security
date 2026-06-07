@@ -170,8 +170,8 @@ def main():
     print(f'  Model: {MODEL_NAME}')
     print(f'  Dataset: {num_benign} benign, ratio {ratio_pct}%')
 
-    train_file = DATA_DIR / f'train_real_html_{num_benign}_r{ratio_pct}.csv'
-    test_file = DATA_DIR / f'test_real_html_{num_benign}_r{ratio_pct}.csv'
+    train_file = DATA_DIR / f'train_real_html.csv'
+    test_file = DATA_DIR / f'test_real_html.csv'
 
     if not train_file.exists():
         print(f'Error: {train_file} not found.')
@@ -242,7 +242,7 @@ def main():
             auc = 0.0
         print(f'  Eval — Acc: {acc:.4f}  Prec: {prec:.4f}  Rec: {rec:.4f}  F1: {f1:.4f}  AUC: {auc:.4f}')
 
-    model_save_path = MODELS_DIR / f'markuplm_{num_benign}_r{ratio_pct}'
+    model_save_path = MODELS_DIR / f'markuplm'
     model.save_pretrained(model_save_path)
     processor.save_pretrained(model_save_path)
     print(f'\nSaved MarkupLM model → {model_save_path}')
@@ -267,7 +267,7 @@ def main():
         'Test_Samples': len(test_htmls),
     }
 
-    report_path = RESULTS_DIR / f'markuplm_metrics_{num_benign}_r{ratio_pct}.json'
+    report_path = RESULTS_DIR / f'markuplm_metrics.json'
     with open(report_path, 'w') as f:
         json.dump(report, f, indent=2)
     print(f'Saved MarkupLM report → {report_path}')
