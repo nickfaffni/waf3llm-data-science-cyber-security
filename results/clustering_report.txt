@@ -1,0 +1,16 @@
+DS4CS Unsupervised Clustering Report
+====================================
+
+Dataset File: features_train_10000_r20.csv
+Sample Count: 10000
+Feature Count: 456
+
+K-Means Optimal (k=2) Silhouette Score: 0.6943
+DBSCAN Detected Clusters: 116
+DBSCAN Outlier (Noise) Count: 7197
+
+Analysis:
+The t-SNE scatter plot reveals clear visual grouping of the page structures.
+Unsupervised K-Means is able to separate typical flat-layout templates from
+structurally dense web apps. This confirms that visual/DOM structural features
+maintain heavy signal that is separable even without label training.

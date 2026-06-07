@@ -1,0 +1,478 @@
+{
+  "adversarial": {
+    "xgb_baseline": {
+      "n": 150,
+      "n_positive": 150,
+      "n_negative": 0,
+      "flagged": 27,
+      "true_positive": 27,
+      "false_positive": 0,
+      "recall": 0.18,
+      "fpr": 0.0,
+      "mean_score": 0.28188931941986084,
+      "recall_by_ood_technique": {
+        "aria_hidden": {
+          "n": 19,
+          "flagged_rate": 0.5789473684210527
+        },
+        "class_based_css_hide": {
+          "n": 19,
+          "flagged_rate": 0.5263157894736842
+        },
+        "color_camouflage": {
+          "n": 19,
+          "flagged_rate": 0.0
+        },
+        "html_entity_visible": {
+          "n": 18,
+          "flagged_rate": 0.05555555555555555
+        },
+        "pseudo_element_content": {
+          "n": 19,
+          "flagged_rate": 0.15789473684210525
+        },
+        "template_tag": {
+          "n": 18,
+          "flagged_rate": 0.0
+        },
+        "text_indent_offscreen": {
+          "n": 19,
+          "flagged_rate": 0.05263157894736842
+        },
+        "transform_translate": {
+          "n": 19,
+          "flagged_rate": 0.05263157894736842
+        }
+      }
+    },
+    "xgb_tuned": {
+      "n": 150,
+      "n_positive": 150,
+      "n_negative": 0,
+      "flagged": 37,
+      "true_positive": 37,
+      "false_positive": 0,
+      "recall": 0.24666666666666667,
+      "fpr": 0.0,
+      "mean_score": 0.37181752920150757,
+      "recall_by_ood_technique": {
+        "aria_hidden": {
+          "n": 19,
+          "flagged_rate": 0.6842105263157895
+        },
+        "class_based_css_hide": {
+          "n": 19,
+          "flagged_rate": 0.5789473684210527
+        },
+        "color_camouflage": {
+          "n": 19,
+          "flagged_rate": 0.10526315789473684
+        },
+        "html_entity_visible": {
+          "n": 18,
+          "flagged_rate": 0.1111111111111111
+        },
+        "pseudo_element_content": {
+          "n": 19,
+          "flagged_rate": 0.10526315789473684
+        },
+        "template_tag": {
+          "n": 18,
+          "flagged_rate": 0.05555555555555555
+        },
+        "text_indent_offscreen": {
+          "n": 19,
+          "flagged_rate": 0.15789473684210525
+        },
+        "transform_translate": {
+          "n": 19,
+          "flagged_rate": 0.15789473684210525
+        }
+      }
+    },
+    "rf": {
+      "n": 150,
+      "n_positive": 150,
+      "n_negative": 0,
+      "flagged": 10,
+      "true_positive": 10,
+      "false_positive": 0,
+      "recall": 0.06666666666666667,
+      "fpr": 0.0,
+      "mean_score": 0.1530202424735758,
+      "recall_by_ood_technique": {
+        "aria_hidden": {
+          "n": 19,
+          "flagged_rate": 0.2631578947368421
+        },
+        "class_based_css_hide": {
+          "n": 19,
+          "flagged_rate": 0.2631578947368421
+        },
+        "color_camouflage": {
+          "n": 19,
+          "flagged_rate": 0.0
+        },
+        "html_entity_visible": {
+          "n": 18,
+          "flagged_rate": 0.0
+        },
+        "pseudo_element_content": {
+          "n": 19,
+          "flagged_rate": 0.0
+        },
+        "template_tag": {
+          "n": 18,
+          "flagged_rate": 0.0
+        },
+        "text_indent_offscreen": {
+          "n": 19,
+          "flagged_rate": 0.0
+        },
+        "transform_translate": {
+          "n": 19,
+          "flagged_rate": 0.0
+        }
+      }
+    },
+    "or_ensemble": {
+      "n": 150,
+      "n_positive": 150,
+      "n_negative": 0,
+      "flagged": 37,
+      "true_positive": 37,
+      "false_positive": 0,
+      "recall": 0.24666666666666667,
+      "fpr": 0.0,
+      "mean_score": 0.37659850062709704,
+      "recall_by_ood_technique": {
+        "aria_hidden": {
+          "n": 19,
+          "flagged_rate": 0.6842105263157895
+        },
+        "class_based_css_hide": {
+          "n": 19,
+          "flagged_rate": 0.5789473684210527
+        },
+        "color_camouflage": {
+          "n": 19,
+          "flagged_rate": 0.10526315789473684
+        },
+        "html_entity_visible": {
+          "n": 18,
+          "flagged_rate": 0.1111111111111111
+        },
+        "pseudo_element_content": {
+          "n": 19,
+          "flagged_rate": 0.10526315789473684
+        },
+        "template_tag": {
+          "n": 18,
+          "flagged_rate": 0.05555555555555555
+        },
+        "text_indent_offscreen": {
+          "n": 19,
+          "flagged_rate": 0.15789473684210525
+        },
+        "transform_translate": {
+          "n": 19,
+          "flagged_rate": 0.15789473684210525
+        }
+      }
+    }
+  },
+  "natural_benign": {
+    "xgb_baseline": {
+      "n": 15,
+      "n_positive": 0,
+      "n_negative": 15,
+      "flagged": 3,
+      "true_positive": 0,
+      "false_positive": 3,
+      "recall": 0.0,
+      "fpr": 0.2,
+      "mean_score": 0.25581732392311096,
+      "flagged_by_source": {
+        "01_bootstrap_modal.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "02_csrf_form.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "03_dropdown_nav.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "04_tab_panels.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "05_lazy_load_images.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "06_accessibility_skip_link.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "07_react_spa_shell.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "08_ecommerce_product.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "09_documentation_with_sidebar.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "10_blog_with_comments.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "examples/benign_1.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_2.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_3.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_4.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_5.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        }
+      }
+    },
+    "xgb_tuned": {
+      "n": 15,
+      "n_positive": 0,
+      "n_negative": 15,
+      "flagged": 3,
+      "true_positive": 0,
+      "false_positive": 3,
+      "recall": 0.0,
+      "fpr": 0.2,
+      "mean_score": 0.324652761220932,
+      "flagged_by_source": {
+        "01_bootstrap_modal.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "02_csrf_form.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "03_dropdown_nav.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "04_tab_panels.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "05_lazy_load_images.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "06_accessibility_skip_link.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "07_react_spa_shell.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "08_ecommerce_product.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "09_documentation_with_sidebar.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "10_blog_with_comments.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "examples/benign_1.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_2.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_3.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_4.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_5.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        }
+      }
+    },
+    "rf": {
+      "n": 15,
+      "n_positive": 0,
+      "n_negative": 15,
+      "flagged": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "recall": 0.0,
+      "fpr": 0.0,
+      "mean_score": 0.20080000000000006,
+      "flagged_by_source": {
+        "01_bootstrap_modal.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "02_csrf_form.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "03_dropdown_nav.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "04_tab_panels.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "05_lazy_load_images.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "06_accessibility_skip_link.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "07_react_spa_shell.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "08_ecommerce_product.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "09_documentation_with_sidebar.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "10_blog_with_comments.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_1.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_2.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_3.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_4.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_5.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        }
+      }
+    },
+    "or_ensemble": {
+      "n": 15,
+      "n_positive": 0,
+      "n_negative": 15,
+      "flagged": 3,
+      "true_positive": 0,
+      "false_positive": 3,
+      "recall": 0.0,
+      "fpr": 0.2,
+      "mean_score": 0.36902926735083263,
+      "flagged_by_source": {
+        "01_bootstrap_modal.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "02_csrf_form.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "03_dropdown_nav.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "04_tab_panels.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "05_lazy_load_images.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "06_accessibility_skip_link.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "07_react_spa_shell.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "08_ecommerce_product.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "09_documentation_with_sidebar.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "10_blog_with_comments.html": {
+          "n": 1,
+          "flagged_rate": 1.0
+        },
+        "examples/benign_1.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_2.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_3.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_4.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        },
+        "examples/benign_5.html": {
+          "n": 1,
+          "flagged_rate": 0.0
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+DS4CS OOD Evaluation Report (10000 benign, ratio 10%)
+========================================
+
+Models trained on the 14 in-distribution techniques are evaluated
+on (a) 150 malicious samples using 8 unseen stealth techniques and
+(b) hand-crafted realistic benign HTML.
+
+--- ADVERSARIAL ---
+  xgb_baseline
+    recall = 0.1267  fpr = 0.0000  flagged 19/150
+  xgb_tuned
+    recall = 0.2467  fpr = 0.0000  flagged 37/150
+  rf
+    recall = 0.0267  fpr = 0.0000  flagged 4/150
+  or_ensemble
+    recall = 0.2533  fpr = 0.0000  flagged 38/150
+
+--- NATURAL_BENIGN ---
+  xgb_baseline
+    recall = 0.0000  fpr = 0.0667  flagged 1/15
+  xgb_tuned
+    recall = 0.0000  fpr = 0.4000  flagged 6/15
+  rf
+    recall = 0.0000  fpr = 0.0000  flagged 0/15
+  or_ensemble
+    recall = 0.0000  fpr = 0.4000  flagged 6/15
+

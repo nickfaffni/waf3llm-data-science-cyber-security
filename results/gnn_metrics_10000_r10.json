@@ -1,0 +1,10 @@
+{
+  "Model": "GNN",
+  "Accuracy": 0.9000900090009001,
+  "Precision": 0.0,
+  "Recall": 0.0,
+  "TPR": 0.0,
+  "FPR": 0.0,
+  "F1_Score": 0.0,
+  "ROC_AUC": 0.6118761261261262
+}

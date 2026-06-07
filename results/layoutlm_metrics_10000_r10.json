@@ -1,0 +1,13 @@
+{
+  "Model": "LayoutLMv3",
+  "Accuracy": 0.898,
+  "Precision": 0.0,
+  "Recall": 0.0,
+  "TPR": 0.0,
+  "FPR": 0.0,
+  "F1_Score": 0.0,
+  "ROC_AUC": 0.5182104022009695,
+  "Epochs": 3,
+  "Train_Samples": 2000,
+  "Test_Samples": 500
+}

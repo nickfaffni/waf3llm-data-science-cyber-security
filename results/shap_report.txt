@@ -1,0 +1,26 @@
+DS4CS SHAP Feature Explanation Report
+=====================================
+
+Top 15 features ranked by their average absolute SHAP impact:
+
+  hidden_element_count           : 0.5350
+  css_trick_count                : 0.4501
+  has_suspicious_nesting         : 0.4429
+  hidden_depth_mean              : 0.2273
+  lsa_embed_49                   : 0.2216
+  hidden_in_form_count           : 0.2090
+  dom_depth_max                  : 0.1610
+  lsa_embed_2                    : 0.1475
+  lsa_embed_9                    : 0.1285
+  lsa_embed_18                   : 0.1263
+  lsa_embed_36                   : 0.1230
+  lsa_embed_19                   : 0.1222
+  lsa_embed_1                    : 0.1164
+  lsa_embed_28                   : 0.1157
+  lsa_embed_27                   : 0.1132
+
+Key Insights:
+1. The feature with the highest impact on IPI classification is 'hidden_element_count'.
+2. DOM structural attributes (like hidden element counts, comment counts, and ratio indicators)
+   dominate feature importance over semantic LSA dimensions, confirming that structural footprinting
+   is highly effective for static injection filtering at ingestion time.

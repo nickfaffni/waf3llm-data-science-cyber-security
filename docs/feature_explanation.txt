@@ -1,0 +1,29 @@
+WAF3LLM Feature Dictionary & Explanation
+========================================
+
+1. Structural Features (The Raw DOM Footprint)
+----------------------------------------------
+These features analyze the raw HTML tree to detect visual camouflage and obfuscation techniques. They do not read the text itself; they detect HOW the attacker is trying to hide the payload from human administrators while ensuring the Web Agent scraper ingests it.
+
+- hidden_element_count: The total number of HTML tags on the page that have been hidden from the visible viewport. A high spike here strongly correlates with an injection payload.
+
+- css_trick_count: The number of times specific deceptive CSS techniques (e.g., `display: none`, `opacity: 0`, `position: absolute; left: -9999px`, zero font-size) are used to camouflage elements.
+
+- event_handler_count: The number of times JavaScript event triggers (like `onload`, `onerror`) are embedded in the hidden elements, which can indicate HTML smuggling techniques.
+
+- hidden_text_length: The total character count of all text that is hidden from the user. Malicious prompts require long, complex instruction sets, causing this feature to spike heavily compared to benign, short hidden labels (like ARIA accessibility tags).
+
+- comment_count: The number of HTML comments (`<!-- -->`). Attackers often use comments for HTML smuggling to bypass basic parsers.
+
+- hidden_to_visible_ratio: The mathematical ratio of invisible text to visible text. Highly malicious web pages often have a disproportionately large amount of invisible text compared to their visual content.
+
+2. Semantic Features (The LSA Embeddings)
+-----------------------------------------
+While structural features detect *how* the text is hidden, the semantic features detect *what* the text means. 
+
+- lsa_embed_0 through lsa_embed_49: 
+  The raw hidden text is first processed by the `all-MiniLM-L6-v2` transformer model, generating a dense 384-dimensional semantic vector. This mathematical vector captures the actual meaning and intent of the sentence (e.g., it mathematically understands the concept of "ignoring instructions" or "system overrides" regardless of the specific vocabulary words used).
+
+  To ensure the WAF operates efficiently in under 20 milliseconds, we apply Truncated SVD (Latent Semantic Analysis - LSA) to compress those 384 dimensions down to the 50 most mathematically significant dimensions. 
+  
+  Therefore, an individual feature like `lsa_embed_49` represents one highly specific axis of semantic meaning. As shown in the SHAP report, specific dimensions strongly trigger the XGBoost model, proving that the ML ensemble relies heavily on the semantic "vibe" or context of the text in tandem with the structural CSS indicators.

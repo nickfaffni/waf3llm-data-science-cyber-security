@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenvs
+venv/
+.venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Local artefacts that should be regenerated, not committed
+data/features_*.csv
+models/*.pkl
+models/*.joblib
+results/*.png
+results/metrics_report.*
+
+# Large raw datasets (track in DVC / HuggingFace cache instead)
+data/benign_real_html_*.csv
+data/final_dataset_real_html_*.csv
+data/train_real_html_*.csv
+data/test_real_html_*.csv
