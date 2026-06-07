@@ -17,6 +17,7 @@ models/*.pth
 scratch/
 todo.md
 TODO.md
+memory/
 
 # =========================
 # Python & Environments
