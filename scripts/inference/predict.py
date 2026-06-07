@@ -34,12 +34,23 @@ def featurize(html: str) -> pd.DataFrame:
     pipeline = joblib.load(MODELS_DIR / 'semantic_pipeline_10000_r20.joblib')
     feats = parse_html_features(html)
     hidden_text = feats.pop('hidden_text', '')
+    
+    # Extract TF-IDF/LSA embeddings
     lsa = pipeline.transform([hidden_text])
     n_lsa = lsa.shape[1]
-
     row = {k: feats[k] for k in feats if k != 'hidden_text'}
     for i in range(n_lsa):
         row[f'lsa_embed_{i}'] = float(lsa[0, i])
+        
+    # Extract SBERT embeddings if enabled
+    sbert_config_path = MODELS_DIR / 'sbert_config_10000_r20.joblib'
+    if sbert_config_path.exists():
+        from transformer_embeddings import TransformerEmbedder
+        embedder = TransformerEmbedder()
+        sbert_vec = embedder.encode([hidden_text], show_progress=False)
+        for i in range(sbert_vec.shape[1]):
+            row[f'sbert_embed_{i}'] = float(sbert_vec[0, i])
+
     df = pd.DataFrame([row])
     df = df.replace([np.inf, -np.inf], 0).fillna(0)
     feature_cols = [c for c in df.columns if c not in EXCLUDE_COLS and c != 'anomaly_score']
@@ -84,7 +95,7 @@ def main():
     print(f'{label}  (P(malicious) = {result["malicious_prob"]:.4f})')
     if args.verbose:
         for k, v in result['features'].items():
-            if not k.startswith('lsa_embed_'):
+            if not k.startswith('sbert_embed_') and not k.startswith('lsa_embed_'):
                 print(f'  {k:30s} {v}')
 
 
