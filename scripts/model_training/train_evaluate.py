@@ -596,25 +596,7 @@ def main():
         }, f, indent=2)
     print(f'Saved structured metrics → {json_path}')
 
-    # Backward compatibility override
-    if num_benign == 3000 and ratio_pct == 20:
-        import shutil
-        shutil.copyfile(report_path, RESULTS_DIR / 'metrics_report.txt')
-        shutil.copyfile(json_path, RESULTS_DIR / 'metrics_report.json')
-        shutil.copyfile(MODELS_DIR / f'rf_model.joblib', MODELS_DIR / 'rf_model.joblib')
-        shutil.copyfile(MODELS_DIR / f'xgb_baseline.joblib', MODELS_DIR / 'xgb_baseline.joblib')
-        shutil.copyfile(MODELS_DIR / f'xgb_tuned.joblib', MODELS_DIR / 'xgb_tuned.joblib')
-        shutil.copyfile(MODELS_DIR / f'lr_model.joblib', MODELS_DIR / 'lr_model.joblib')
-        shutil.copyfile(MODELS_DIR / f'or_ensemble.joblib', MODELS_DIR / 'or_ensemble.joblib')
-        shutil.copyfile(MODELS_DIR / f'weighted_ensemble.joblib', MODELS_DIR / 'weighted_ensemble.joblib')
-        shutil.copyfile(RESULTS_DIR / f'rf_confusion_matrix.png', RESULTS_DIR / 'rf_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'xgb_baseline_confusion_matrix.png', RESULTS_DIR / 'xgb_baseline_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'xgb_tuned_confusion_matrix.png', RESULTS_DIR / 'xgb_tuned_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'lr_confusion_matrix.png', RESULTS_DIR / 'lr_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'or_ensemble_confusion_matrix.png', RESULTS_DIR / 'or_ensemble_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'weighted_ensemble_confusion_matrix.png', RESULTS_DIR / 'weighted_ensemble_confusion_matrix.png')
-        shutil.copyfile(RESULTS_DIR / f'xgb_tuned_pr_curve.png', RESULTS_DIR / 'xgb_tuned_pr_curve.png')
-        print("Saved backward-compatible reports and artifacts.")
+    # Backward compatibility override removed since suffixes were standardized
 
     print('\nPhase 3 Complete.')
 
