@@ -74,7 +74,7 @@ DS4CS/
 │   └── ipi_taxonomy.md                  # Comprehensive taxonomy of 30 payloads and 14 stealth techniques
 │
 ├── figures/                             # Architecture / attack-flow PNGs for the slide deck
-├── literature_review/                   # Research papers + IPI_Research_Bibliography.bib
+├── papers/                              # Research papers + IPI_Research_Bibliography.bib
 └── lectures/                            # Course lecture recordings (3 MP4s)
 ```
 
@@ -196,7 +196,7 @@ python -m pytest tests/ -v
 - **WebSentinel** — Detecting and Localizing Prompt Injection Attacks for Web Agents (2026)
 - **Dual-Modality Multi-Stage Adversarial Safety Training** — Robustifying Multimodal Web Agents (2026)
 
-See `literature_review/IPI_Research_Bibliography.bib` for the full bibliography.
+See `papers/IPI_Research_Bibliography.bib` for the full bibliography.
 
 ---
 
