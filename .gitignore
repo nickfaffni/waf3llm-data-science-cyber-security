@@ -1,30 +1,79 @@
-# Python
+# =========================
+# DS4CS Project Specific
+# =========================
+# Ignore all raw & processed datasets to prevent repository bloat
+data/*.csv
+data/*.json
+
+# Ignore all trained model weights (these should be regenerated or hosted on DVC/HF)
+models/*.pkl
+models/*.joblib
+models/*.pt
+models/*.pth
+
+# We deliberately KEEP results/ tracked so the lecturer can read the output metrics!
+
+# Ignore any scratch/temporary folders
+scratch/
+
+# =========================
+# Python & Environments
+# =========================
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
 *.egg-info/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
+.Python
+build/
+dist/
+*.egg
 
-# Virtualenvs
+# Virtual Environments
 venv/
 .venv/
 env/
+ENV/
 
-# OS
-.DS_Store
-Thumbs.db
+# =========================
+# Jupyter Notebooks
+# =========================
+.ipynb_checkpoints/
 
-# IDE
+# =========================
+# Testing, Coverage & Linters
+# =========================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.cover
+
+# =========================
+# IDEs & Editor configs
+# =========================
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
-# Local artefacts that should be regenerated, not committed
-data/features_*.csv
-models/*.pkl
-models/*.joblib
-results/*.png
-results/metrics_report.*
+# =========================
+# OS Generated Files
+# =========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
 
-# Large raw datasets (track in DVC / HuggingFace cache instead)
-data/*.csv
+# =========================
+# Secrets & Configs
+# =========================
+.env
+.env.*
+secrets.json
