@@ -18,7 +18,10 @@ scratch/
 todo.md
 TODO.md
 memory/
-docs/
+# Ignore heavy personal course documents but track Markdown documentation
+docs/*.pdf
+docs/*.docx
+docs/*.pptx
 
 # =========================
 # Python & Environments
