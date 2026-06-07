@@ -27,7 +27,4 @@ results/*.png
 results/metrics_report.*
 
 # Large raw datasets (track in DVC / HuggingFace cache instead)
-data/benign_real_html_*.csv
-data/final_dataset_real_html_*.csv
-data/train_real_html_*.csv
-data/test_real_html_*.csv
+data/*.csv
