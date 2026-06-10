@@ -45,6 +45,10 @@ def test_every_injection_technique_is_detectable(technique):
     injected, _ = inject_payload_stealth(BASE_HTML, PAYLOAD, technique=technique)
     feats = parse_html_features(injected)
     assert _signal(feats), f'Technique {technique!r} produced no detectable signal'
+    hidden_text = feats.get('hidden_text', '')
+    from ipi_knowledge_features import _normalize_hidden_text
+    decoded = _normalize_hidden_text(hidden_text)
+    assert 'ignore' in decoded.lower() or 'instructions' in decoded.lower(), f'Payload not captured for {technique!r}: hidden_text={hidden_text!r}, decoded={decoded!r}'
 
 
 def test_benign_page_low_signal():

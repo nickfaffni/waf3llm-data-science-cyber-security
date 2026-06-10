@@ -308,6 +308,27 @@ def parse_html_features(html_content: str) -> dict:
     script_count = 0
     event_handler_count = 0
 
+    # 7. Inline event-handler attributes (onload, onerror, onclick, ...)
+    #    These are a common IPI vector (svg/body onload, img onerror, anchor href=javascript:).
+    for tag in list(soup.find_all(True)):
+        captured_here = False
+        for attr_name in list(tag.attrs.keys()):
+            if isinstance(attr_name, str) and attr_name.lower().startswith('on'):
+                handler_value = tag.attrs.get(attr_name, '')
+                if isinstance(handler_value, list):
+                    handler_value = ' '.join(handler_value)
+                if handler_value:
+                    hidden_text_parts.append(str(handler_value))
+                event_handler_count += 1
+                captured_here = True
+        href = tag.get('href', '') if hasattr(tag, 'get') else ''
+        if isinstance(href, str) and href.lower().startswith('javascript:'):
+            hidden_text_parts.append(href)
+            event_handler_count += 1
+            captured_here = True
+        if captured_here:
+            hidden_element_count += 1
+
     # 1. HTML comments
     for c in soup.find_all(string=lambda t: isinstance(t, Comment)):
         hidden_text_parts.append(str(c))
@@ -382,26 +403,6 @@ def parse_html_features(html_content: str) -> dict:
             hidden_text_parts.append(tag.get_text(separator=' ', strip=True))
             tag.extract()
 
-    # 7. Inline event-handler attributes (onload, onerror, onclick, ...)
-    #    These are a common IPI vector (svg/body onload, img onerror, anchor href=javascript:).
-    for tag in list(soup.find_all(True)):
-        captured_here = False
-        for attr_name in list(tag.attrs.keys()):
-            if isinstance(attr_name, str) and attr_name.lower().startswith('on'):
-                handler_value = tag.attrs.get(attr_name, '')
-                if isinstance(handler_value, list):
-                    handler_value = ' '.join(handler_value)
-                if handler_value:
-                    hidden_text_parts.append(str(handler_value))
-                event_handler_count += 1
-                captured_here = True
-        href = tag.get('href', '') if hasattr(tag, 'get') else ''
-        if isinstance(href, str) and href.lower().startswith('javascript:'):
-            hidden_text_parts.append(href)
-            event_handler_count += 1
-            captured_here = True
-        if captured_here:
-            hidden_element_count += 1
 
     # 8. Zero-size images / iframes (data exfiltration)
     def _is_zero(tag):

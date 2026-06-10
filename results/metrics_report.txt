@@ -2,112 +2,112 @@ DS4CS Model Evaluation Report (3000 benign, ratio 20%)
 ========================================
 
 Model: Random Forest
-  Accuracy  : 0.8980
-  Precision : 0.8393
-  Recall    : 0.6060
-  TPR       : 0.6060
+  Accuracy  : 0.9268
+  Precision : 0.8661
+  Recall    : 0.7500
+  TPR       : 0.7500
   FPR       : 0.0290
-  F1_Score  : 0.7038
-  PR_AUC    : 0.8120
-  ROC_AUC   : 0.9144
+  F1_Score  : 0.8039
+  PR_AUC    : 0.8984
+  ROC_AUC   : 0.9594
 
 Model: XGBoost (baseline)
-  Accuracy  : 0.9112
-  Precision : 0.8798
-  Recall    : 0.6440
-  TPR       : 0.6440
-  FPR       : 0.0220
-  F1_Score  : 0.7436
-  PR_AUC    : 0.8385
-  ROC_AUC   : 0.9146
+  Accuracy  : 0.9408
+  Precision : 0.9112
+  Recall    : 0.7800
+  TPR       : 0.7800
+  FPR       : 0.0190
+  F1_Score  : 0.8405
+  PR_AUC    : 0.9158
+  ROC_AUC   : 0.9612
 
 Model: XGBoost (tuned)
-  Accuracy  : 0.9148
-  Precision : 0.8827
-  Recall    : 0.6620
-  TPR       : 0.6620
-  FPR       : 0.0220
-  F1_Score  : 0.7566
-  PR_AUC    : 0.8347
-  ROC_AUC   : 0.9085
+  Accuracy  : 0.9444
+  Precision : 0.9227
+  Recall    : 0.7880
+  TPR       : 0.7880
+  FPR       : 0.0165
+  F1_Score  : 0.8501
+  PR_AUC    : 0.9224
+  ROC_AUC   : 0.9637
 
 Model: Logistic Regression
-  Accuracy  : 0.7960
-  Precision : 0.4923
-  Recall    : 0.6400
-  TPR       : 0.6400
-  FPR       : 0.1650
-  F1_Score  : 0.5565
-  PR_AUC    : 0.6759
-  ROC_AUC   : 0.7964
+  Accuracy  : 0.8464
+  Precision : 0.5967
+  Recall    : 0.7160
+  TPR       : 0.7160
+  FPR       : 0.1210
+  F1_Score  : 0.6509
+  PR_AUC    : 0.7694
+  ROC_AUC   : 0.8661
 
 Model: Naive Bayes
-  Accuracy  : 0.2192
-  Precision : 0.2025
-  Recall    : 0.9880
-  TPR       : 0.9880
-  FPR       : 0.9730
-  F1_Score  : 0.3361
-  PR_AUC    : 0.2029
-  ROC_AUC   : 0.5088
+  Accuracy  : 0.2256
+  Precision : 0.2008
+  Recall    : 0.9640
+  TPR       : 0.9640
+  FPR       : 0.9590
+  F1_Score  : 0.3324
+  PR_AUC    : 0.2011
+  ROC_AUC   : 0.5033
 
 Model: SVM
-  Accuracy  : 0.8440
-  Precision : 0.6118
-  Recall    : 0.6020
-  TPR       : 0.6020
-  FPR       : 0.0955
-  F1_Score  : 0.6069
-  PR_AUC    : 0.6891
-  ROC_AUC   : 0.8085
+  Accuracy  : 0.8760
+  Precision : 0.6792
+  Recall    : 0.7200
+  TPR       : 0.7200
+  FPR       : 0.0850
+  F1_Score  : 0.6990
+  PR_AUC    : 0.7926
+  ROC_AUC   : 0.8880
 
 Model: KNN
-  Accuracy  : 0.7824
-  Precision : 0.4659
-  Recall    : 0.6020
-  TPR       : 0.6020
-  FPR       : 0.1725
-  F1_Score  : 0.5253
-  PR_AUC    : 0.5662
-  ROC_AUC   : 0.7798
+  Accuracy  : 0.8180
+  Precision : 0.5371
+  Recall    : 0.6520
+  TPR       : 0.6520
+  FPR       : 0.1405
+  F1_Score  : 0.5890
+  PR_AUC    : 0.6393
+  ROC_AUC   : 0.8280
 
 Model: ANN
-  Accuracy  : 0.8556
-  Precision : 0.6371
-  Recall    : 0.6460
-  TPR       : 0.6460
-  FPR       : 0.0920
-  F1_Score  : 0.6415
-  PR_AUC    : 0.7162
-  ROC_AUC   : 0.8196
+  Accuracy  : 0.8812
+  Precision : 0.6790
+  Recall    : 0.7700
+  TPR       : 0.7700
+  FPR       : 0.0910
+  F1_Score  : 0.7216
+  PR_AUC    : 0.8260
+  ROC_AUC   : 0.8951
 
 Model: DNN
-  Accuracy  : 0.8644
-  Precision : 0.6769
-  Recall    : 0.6160
-  TPR       : 0.6160
-  FPR       : 0.0735
-  F1_Score  : 0.6450
-  PR_AUC    : 0.7258
-  ROC_AUC   : 0.8140
+  Accuracy  : 0.8948
+  Precision : 0.7301
+  Recall    : 0.7520
+  TPR       : 0.7520
+  FPR       : 0.0695
+  F1_Score  : 0.7409
+  PR_AUC    : 0.8346
+  ROC_AUC   : 0.9044
 
 Model: Hard-OR Ensemble
-  Accuracy  : 0.9064
-  Precision : 0.8228
-  Recall    : 0.6780
-  TPR       : 0.6780
-  FPR       : 0.0365
-  F1_Score  : 0.7434
-  PR_AUC    : 0.8381
-  ROC_AUC   : 0.9222
+  Accuracy  : 0.9356
+  Precision : 0.8599
+  Recall    : 0.8100
+  TPR       : 0.8100
+  FPR       : 0.0330
+  F1_Score  : 0.8342
+  PR_AUC    : 0.9209
+  ROC_AUC   : 0.9666
 
 Model: Weighted Soft Vote
-  Accuracy  : 0.9060
-  Precision : 0.8571
-  Recall    : 0.6360
-  TPR       : 0.6360
-  FPR       : 0.0265
-  F1_Score  : 0.7302
-  PR_AUC    : 0.8318
-  ROC_AUC   : 0.9141
+  Accuracy  : 0.9372
+  Precision : 0.8979
+  Recall    : 0.7740
+  TPR       : 0.7740
+  FPR       : 0.0220
+  F1_Score  : 0.8314
+  PR_AUC    : 0.9161
+  ROC_AUC   : 0.9613
 
