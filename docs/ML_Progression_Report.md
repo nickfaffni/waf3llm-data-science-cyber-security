@@ -239,7 +239,7 @@ Comparing the 3,000 template baseline with the scaled 10,000 template results (b
 ## Iteration 8: Deep Learning & Unsupervised Representation
 **Objective:** Map HTML contents to visual/unsupervised structures to inspect structural clusters and bypass text processing.
 1.  **Text-to-Image representation learning (PyTorch CNN):** Raw HTML hidden text was mapped to a $64 \times 64$ ASCII-intensity grid (image) and trained on a 2D CNN (Conv2D -> MaxPool2D -> Linear). The CNN converged to the majority baseline (Accuracy **80.00%**, Recall **0.00%**), indicating that raw pixel mappings of characters require deeper convolution layers or pre-trained visual encoders (like layoutLM) to extract layout structures.
-2.  **Unsupervised Clustering (t-SNE visualization):** Projecting the 50 dense MinHash semantic features into 2D space using t-SNE reveals extremely strong structural cluster groupings. Unsupervised **K-Means (k=2)** achieved a silhouette score of **0.9692** and aligned with DOM app density. This confirms that structural layout profiles cluster cleanly even without label training.
+2.  **Unsupervised Clustering (t-SNE visualization):** Projecting the 92 rich structural-semantic features into 2D space using t-SNE reveals extremely strong structural cluster groupings. Unsupervised **K-Means (k=2)** achieved a silhouette score of **0.9123** and aligned with DOM app density. This confirms that structural layout profiles cluster cleanly even without label training.
 
 ---
 

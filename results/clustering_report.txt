@@ -1,13 +1,13 @@
 DS4CS Unsupervised Clustering Report
 ====================================
 
-Dataset File: features_train_10000_r20.csv
+Dataset File: features_train.csv
 Sample Count: 10000
-Feature Count: 456
+Feature Count: 92
 
-K-Means Optimal (k=2) Silhouette Score: 0.6943
-DBSCAN Detected Clusters: 116
-DBSCAN Outlier (Noise) Count: 7197
+K-Means Optimal (k=2) Silhouette Score: 0.9123
+DBSCAN Detected Clusters: 11
+DBSCAN Outlier (Noise) Count: 526
 
 Analysis:
 The t-SNE scatter plot reveals clear visual grouping of the page structures.
