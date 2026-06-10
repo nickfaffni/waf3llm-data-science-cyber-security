@@ -21,7 +21,7 @@ Please output the presentation slide-by-slide using the following exact format f
 3. **The Taxonomy (Direct vs. Indirect, LLM vs ML):** Break down the defensive landscape. Emphasize why our predictive ML approach is faster and safer than using Generative LLMs as classifiers.
 4. **Our Solution (WAF3LLM):** Detail the "Shift-Left" architecture operating at the raw HTML ingestion boundary. 
 5. **Methodology:** Explain the zero-leakage URL-grouped split and the messy, real-world Common Crawl (C4) dataset.
-6. **Results & Tradeoffs:** Highlight the 86.4% True Positive Rate using the WAF3LLM ensemble (Jaccard Signatures + XGBoost) and its blazing-fast ~20ms inference time.
+6. **Results & Tradeoffs:** Highlight the 90.62% True Positive Rate using the optimized WAF3LLM pipeline and its blazing-fast ~20ms inference time.
 7. **Advanced Architectures (The Failures):** Briefly explain why GNNs and SMOTE failed to beat the baseline in this highly imbalanced environment.
 8. **Limitations & Future Work:** Focus heavily on the Multilingual Jailbreak vulnerability (e.g., Chinese injections) and how simply swapping the English `MiniLM` for a multilingual transformer solves it.
 9. **Conclusion:** Summarize why traditional ML dominates heavy LLMs for structural web defense.

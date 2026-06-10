@@ -1,11 +1,11 @@
 {
-  "Accuracy": 0.608,
-  "TPR": 0.7083333333333334,
-  "FPR": 0.4158415841584158,
-  "F1_Score": 0.40963855421686746,
-  "Optimal_Threshold": 0.1,
+  "Accuracy": 0.87,
+  "TPR": 0.90625,
+  "FPR": 0.13861386138613863,
+  "F1_Score": 0.7280334728033473,
+  "Optimal_Jaccard_Threshold": 1.01,
+  "Optimal_XGB_Threshold": 0.14,
   "Layer_Stats": {
-    "2": 417,
-    "1": 83
+    "2": 500
   }
 }

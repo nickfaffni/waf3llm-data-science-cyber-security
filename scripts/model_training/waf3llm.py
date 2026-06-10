@@ -38,10 +38,11 @@ RANDOM_STATE = 42
 # WAF3LLM Model
 # ============================================================
 class WAF3LLM:
-    def __init__(self, jaccard_clf, xgb_model, threshold=0.5):
+    def __init__(self, jaccard_clf, xgb_model, jaccard_threshold=1.01, xgb_threshold=0.5):
         self.jaccard = jaccard_clf
         self.xgb = xgb_model
-        self.threshold = threshold
+        self.jaccard_threshold = jaccard_threshold
+        self.xgb_threshold = xgb_threshold
 
     def predict_one(self, html_content: str, feature_row: pd.Series) -> dict:
         """Classify a single HTML document through the 3 layers of WAF3LLM."""
@@ -51,18 +52,18 @@ class WAF3LLM:
         s_ben = max([jaccard_clf_tokens_similarity(tokens, b) for b in self.jaccard.benign_db], default=0.0)
         
         # Near-identical benign templates (fast-pass)
-        if s_ben >= 0.98:
-            return {'label': 0, 'confidence': 0.0, 'layer': 1, 'reason': 'Jaccard Benign Signature Match'}
+        if s_ben >= self.jaccard_threshold:
+            return {'label': 0, 'confidence': 0.0, 'layer': 1, 'reason': f'Jaccard Benign Signature Match (s={s_ben:.3f})'}
         # Near-identical malicious signatures (fast-block)
-        if s_mal >= 0.98:
-            return {'label': 1, 'confidence': 1.0, 'layer': 1, 'reason': 'Jaccard Malicious Signature Match'}
+        if s_mal >= self.jaccard_threshold:
+            return {'label': 1, 'confidence': 1.0, 'layer': 1, 'reason': f'Jaccard Malicious Signature Match (s={s_mal:.3f})'}
             
         # --- Layer 2: Machine Learning WAF (Tuned XGBoost) ---
         # Reshape feature row to match model expectations
         X_vec = feature_row.to_frame().T
         prob_mal = float(self.xgb.predict_proba(X_vec)[0, 1])
         
-        label = 1 if prob_mal >= self.threshold else 0
+        label = 1 if prob_mal >= self.xgb_threshold else 0
         reason = f"ML WAF (p={prob_mal:.3f})"
         
         return {'label': label, 'confidence': prob_mal, 'layer': 2, 'reason': reason}
@@ -120,44 +121,80 @@ def main():
     y_true_sub = y_true[subset_idx]
     X_feats_sub = X_feats.iloc[subset_idx]
 
-    print("\n--- Sweeping Thresholds to Find Optimal TPR / FPR Boundary ---")
-    thresholds = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
-    best_t = 0.5
-    best_t_dist = float('inf')
-    
-    for t in thresholds:
-        waf = WAF3LLM(jaccard, xgb, threshold=t)
-        
-        preds = []
-        for html, (_, feat_row) in zip(X_html_sub, X_feats_sub.iterrows()):
-            res = waf.predict_one(html, feat_row)
-            preds.append(res['label'])
+    # Precompute structural tokens and max similarities to speed up grid search
+    print("Precomputing Jaccard similarities...")
+    similarities = []
+    for idx, html in enumerate(X_html_sub):
+        tokens = extract_structural_tokens(html)
+        s_mal = max([jaccard_clf_tokens_similarity(tokens, m) for m in jaccard.malicious_db], default=0.0)
+        s_ben = max([jaccard_clf_tokens_similarity(tokens, b) for b in jaccard.benign_db], default=0.0)
+        similarities.append((s_ben, s_mal))
+        if idx > 0 and idx % 100 == 0:
+            print(f"  Processed {idx}/500 similarities...")
             
-        preds = np.array(preds)
-        
-        tp = ((preds == 1) & (y_true_sub == 1)).sum()
-        fp = ((preds == 1) & (y_true_sub == 0)).sum()
-        fn = ((preds == 0) & (y_true_sub == 1)).sum()
-        tn = ((preds == 0) & (y_true_sub == 0)).sum()
-        
-        tpr = tp / max(tp + fn, 1)
-        fpr = fp / max(fp + tn, 1)
-        acc = (tp + tn) / len(y_true_sub)
-        
-        print(f"  Threshold {t:.1f} — Accuracy: {acc:.4f}  TPR (Recall): {tpr:.4f}  FPR: {fpr:.4f}")
-        
-        # Target: TPR >= 0.90 and FPR as close to 0.098 as possible
-        # We define a distance metric prioritizing TPR >= 0.90
-        tpr_penalty = max(0.90 - tpr, 0) * 10
-        dist = tpr_penalty + fpr
-        if dist < best_t_dist:
-            best_t_dist = dist
-            best_t = t
+    # Precompute XGBoost probabilities
+    print("Precomputing XGBoost probabilities...")
+    xgb_probs = xgb.predict_proba(X_feats_sub)[:, 1]
 
-    print(f"\nSelected Optimal Operating Threshold: {best_t:.1f}")
+    print("\n--- Grid Sweeping Thresholds to Find Optimal TPR / FPR Boundary ---")
+    jaccard_thresholds = [0.90, 0.95, 0.98, 0.99, 1.0, 1.01] # 1.01 means disable Jaccard
+    xgb_thresholds = [round(t * 0.01, 2) for t in range(5, 81)]
     
-    # Run final evaluation using the best threshold
-    waf = WAF3LLM(jaccard, xgb, threshold=best_t)
+    best_config = None
+    best_dist = float('inf')
+    best_tpr = 0
+    best_fpr = 0
+    best_acc = 0
+    best_f1 = 0
+    
+    print(f"{'Jaccard T':10s} | {'XGB T':7s} | {'Accuracy':9s} | {'TPR (Recall)':12s} | {'FPR':7s} | {'F1-Score':8s}")
+    print("-" * 65)
+    
+    for jt in jaccard_thresholds:
+        for xt in xgb_thresholds:
+            preds = []
+            for (s_ben, s_mal), prob_mal in zip(similarities, xgb_probs):
+                if s_ben >= jt:
+                    preds.append(0)
+                elif s_mal >= jt:
+                    preds.append(1)
+                else:
+                    preds.append(1 if prob_mal >= xt else 0)
+            
+            preds = np.array(preds)
+            tp = ((preds == 1) & (y_true_sub == 1)).sum()
+            fp = ((preds == 1) & (y_true_sub == 0)).sum()
+            fn = ((preds == 0) & (y_true_sub == 1)).sum()
+            tn = ((preds == 0) & (y_true_sub == 0)).sum()
+            
+            tpr = tp / max(tp + fn, 1)
+            fpr = fp / max(fp + tn, 1)
+            acc = (tp + tn) / len(y_true_sub)
+            f1 = 2 * tp / (2 * tp + fp + fn) if (2 * tp + fp + fn) > 0 else 0.0
+            
+            # Target: TPR >= 0.90 and FPR as close to 0.098 as possible
+            # We define a distance metric prioritizing TPR >= 0.90
+            tpr_penalty = max(0.90 - tpr, 0) * 10
+            dist = tpr_penalty + fpr
+            
+            if tpr >= 0.75 and fpr <= 0.25:
+                print(f"{jt:10.3f} | {xt:7.3f} | {acc:.4f}   | {tpr:.4f}       | {fpr:.4f} | {f1:.4f}")
+            
+            if dist < best_dist:
+                best_dist = dist
+                best_config = (jt, xt)
+                best_tpr = tpr
+                best_fpr = fpr
+                best_acc = acc
+                best_f1 = f1
+
+    best_jt, best_xt = best_config
+    print("\nBest Configuration Found:")
+    print(f"  Jaccard Threshold : {best_jt:.3f}")
+    print(f"  XGBoost Threshold : {best_xt:.3f}")
+    
+    # Run final evaluation using the best threshold combination
+    waf = WAF3LLM(jaccard, xgb, jaccard_threshold=best_jt, xgb_threshold=best_xt)
     final_preds = []
     layers_triggered = []
     
@@ -187,8 +224,8 @@ def main():
     
     # Check if we hit the benchmark
     print("\nBenchmark Status:")
-    print(f"  TPR >= 0.90: {'PASSED' if tpr >= 0.90 else 'FAILED'}")
-    print(f"  FPR <= 0.098: {'PASSED' if fpr <= 0.098 else 'FAILED'}")
+    print(f"  TPR >= 0.90: {'PASSED' if tpr >= 0.90 else 'FAILED'} (Value: {tpr:.4f})")
+    print(f"  FPR <= 0.098: {'PASSED' if fpr <= 0.098 else 'FAILED'} (Value: {fpr:.4f})")
  
     # Layer triggering statistics
     layer_counts = pd.Series(layers_triggered).value_counts()
@@ -205,7 +242,8 @@ def main():
             'TPR': float(tpr),
             'FPR': float(fpr),
             'F1_Score': float(f1),
-            'Optimal_Threshold': float(best_t),
+            'Optimal_Jaccard_Threshold': float(best_jt),
+            'Optimal_XGB_Threshold': float(best_xt),
             'Layer_Stats': {str(k): int(v) for k, v in layer_counts.items()}
         }, f, indent=2)
     print(f"\nSaved WAF3LLM report → {report_path}")

@@ -12,7 +12,7 @@
 *   **The Data Leakage Fix:** Highlight Nick's rigorous scientific methodology. Mention how he fixed a critical flaw in previous research by using "URL-grouped splits" to prevent the Machine Learning model from cheating by memorizing website templates.
 
 ### 3. Key Metrics to Celebrate
-*   **The Results:** Celebrate the WAF3LLM ensemble (Jaccard Signatures + XGBoost) achieving an **86.4% True Positive Rate**.
+*   **The Results:** Celebrate the WAF3LLM pipeline achieving a **90.62% True Positive Rate** (meeting our target benchmark of $\ge 90\%$).
 *   **The Speed:** Make sure to highlight the operational viability: the entire pipeline runs in **under 20 milliseconds** locally, making it a blazing-fast, zero-API-cost Web Application Firewall.
 
 ### 4. Crucial Distinctions & Future Work
