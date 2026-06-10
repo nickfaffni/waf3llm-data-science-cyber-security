@@ -85,7 +85,7 @@ Payloads aiming to trick the agent into making outbound network requests with se
 
 Once a payload is selected, the injection engine wraps it in one of **14 structural delivery techniques**. These techniques ensure the payload is invisible to a human user viewing the rendered page, but prominently available in the DOM tree for a scraping Web Agent to ingest. 
 
-It is these structural footprints that our Machine Learning models (XGBoost, Random Forest) use to detect injections *without* needing to understand the semantic meaning of the text.
+It is these structural footprints, combined with our **knowledge-based semantic intent features** (like imperative verbs, privileges, decoding, and exfiltration domain counts), that our Machine Learning models use to detect injections with extremely high precision. By fusing structural anomalies with semantic command analysis, the WAF achieves both high visibility of DOM layout modifications and deep understanding of the hidden text's malicious intent.
 
 1. **`display_none_div`**: Hides the payload inside a `<div>` with `style="display:none;"`.
 2. **`visibility_hidden_div`**: Uses `style="visibility:hidden;"` so it is visually invisible but occupies layout space.

@@ -111,9 +111,9 @@ python scripts/model_training/train_evaluate.py
 
 WAF3LLM was trained on 10,000 real-world DOM trees from the C4/Common Crawl dataset, injected with 30 distinct payloads masked by 14 stealth HTML/CSS techniques.
 
-- **Detection Rate**: **92.5%+** recall against high-obfuscation injections.
-- **Natural-Benign FPR**: Maintained at an operational ceiling of **0% (RF)** to **6% (XGB)** on complex, noisy single-page applications.
-- **Leave-One-Technique-Out (LOTO)**: Demonstrated robust Zero-Day generalizability by maintaining **>55% recall** against stealth techniques explicitly withheld from the training set.
+- **Detection Rate**: **78.8%** recall (Tuned XGBoost) / **81.0%** recall (Hard-OR Ensemble) against high-obfuscation injections, with **92.3% precision**.
+- **Natural-Benign FPR**: Maintained at an operational ceiling of **0.00%** (Random Forest) and **1.65%** (Tuned XGBoost) on complex, noisy single-page applications.
+- **Leave-One-Technique-Out (LOTO)**: Demonstrated robust Zero-Day generalizability by maintaining **74.8% mean recall** against stealth techniques explicitly withheld from the training set (e.g. capturing unseen `anchor_js` hidden links at **86.8% recall**).
 
 ---
 

@@ -271,9 +271,38 @@ TreeSHAP feature impact rankings confirm the core research hypothesis:
 
 ---
 
+## Iteration 10: Knowledge-Based Semantic Features (v2) & DOM Extraction Order Correctness (Final Epoch)
+**Objective:** Resolve the remaining blind spots (e.g., visual stealth vectors like `anchor_js` and obfuscated events) by shifting the focus from purely structural counts to semantic intent (15 original + 5 new v2 KB features, including a text normalization and decoding layer). Crucially, resolve a DOM parsing vulnerability in `extract_features.py` where elements hidden by CSS inline styles were extracted *before* their event handlers or javascript: hrefs were parsed, causing the most evasive injection techniques to be completely ignored by the WAF.
+
+**Features Added:** 20 domain-expert features targeting command intent (imperative density, roleplay indicators, privilege keywords, exfil domain counts, base64 payloads, encoding obfuscation ratios).
+**Parsing Bugfix:** Moved inline event-handler and javascript: href scanning to run at the very beginning of the parsing pipeline, before any hidden elements are extracted and removed from the DOM tree.
+
+### Results (10,000 base pages, 20% ratio)
+| Model | Accuracy | Precision | TPR (Recall) | FPR | F1-Score | PR-AUC | ROC-AUC |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Random Forest** | 92.68% | 86.61% | 75.00% | 2.90% | 80.39% | 89.84% | 95.94% |
+| **XGBoost (Baseline)** | 94.08% | 91.12% | 78.00% | 1.90% | 84.05% | 91.58% | 96.12% |
+| **XGBoost (Tuned)** | **94.44%** | **92.27%** | **78.80%** | **1.65%** | **85.01%** | **92.24%** | **96.37%** |
+| **Logistic Regression** | 84.64% | 59.67% | 71.60% | 12.10% | 65.09% | 76.94% | 86.61% |
+| **Naive Bayes** | 22.56% | 20.08% | 96.40% | 95.90% | 33.24% | 20.11% | 50.33% |
+| **SVM** | 87.60% | 67.92% | 72.00% | 8.50% | 69.90% | 79.26% | 88.80% |
+| **KNN** | 81.80% | 53.71% | 65.20% | 14.05% | 58.90% | 63.93% | 82.80% |
+| **Artificial Neural Network (ANN)** | 88.12% | 67.90% | 77.00% | 9.10% | 72.16% | 82.60% | 89.51% |
+| **Deep Neural Network (DNN)** | 89.48% | 73.01% | 75.20% | 6.95% | 74.09% | 83.46% | 90.44% |
+| **Hard-OR Ensemble** | 93.56% | 85.99% | **81.00%** | 3.30% | 83.42% | 92.09% | 96.66% |
+| **Weighted Soft Vote** | 93.72% | 89.79% | 77.40% | 2.20% | 83.14% | 91.61% | 96.13% |
+
+### Key Takeaways
+1. **The Core Hypothesis Vindicated:** The addition of 20 domain-expert features combined with a normalized decoding layer caused a monumental jump in model performance. Tuned XGBoost F1-score jumped from **48.70%** (Iteration 6b) to **85.01%** (Iteration 10), and PR-AUC surged from **53.75%** to **92.24%**!
+2. **Stealth Evasion Eclipsed:** The DOM extraction order fix resolved the `anchor_js` blind spot completely. The recall for the visual stealth `anchor_js` technique went from **7.9% to 94.7%** (and **86.8% recall** in OOD LOTO evaluations).
+3. **Out-of-Distribution (LOTO) Resilience:** The mean recall on truly unseen, held-out techniques surged from **24.67%** to **74.80%**!
+4. **WAF Compliance Achieved:** We successfully met WAF operational requirements. Hard-OR Ensemble pushed TPR to **81.00%** while maintaining a very low False Positive Rate of **3.30%** (was 17.35% in Iteration 6b).
+
+---
+
 ## Final Conclusion for Presentation
-1.  **Shift-Left structural analysis is highly effective:** Over 50% of the explained variance and the top SHAP/RF feature importances are dominated by DOM structural indicators (`hidden_text_length`, `hidden_element_count`, `hidden_to_visible_ratio`) rather than flat text, proving that pre-readability parsing is the correct defense paradigm.
-2.  **URL-Group separation reveals the true operational boundary:** Removing data leakage lowered baseline scores to realistic, highly defensible levels. Imbalanced threat detection requires threshold tuning over naive accuracy.
-3.  **Scaling up training data significantly boosts model robustness:** Quadrupling the benign templates (from 2.4k to 8k in train) yields a **+21.3% PR-AUC boost** and slashes false alarms on complex benign dynamic layouts by **40%** (from 60% FPR to 20% FPR).
-4.  **WAF3LLM represents a realistic operational framework:** signatures (Jaccard) filter duplicates quickly, tuned ML (XGBoost) flags anomalies, and SHAP logs telemetry. To minimize false positives, Random Forest (0.00% natural FPR) represents a safe standalone blocker, whereas Tuned XGBoost/WAF3LLM functions best as a first-stage gateway filtering feed.
-5.  **Persisted pipeline is deployment-ready:** MinHash + classifier all serialized; `predict.py` scores a single HTML file end-to-end.
+1.  **Shift-Left structural-semantic analysis is highly effective:** Integrating domain-expert knowledge features with correct tag-traversal structures achieves **78.80% TPR** and **92.27% Precision** (Tuned XGBoost), proving that pre-readability parsing is the correct defense paradigm.
+2.  **Expert domain features outperform raw embeddings:** Upgrading the feature space with 20 knowledge-based features and a decoding preprocessor outperformed generic learned representations and raw MinHash dimensions.
+3.  **Correct DOM parsing is critical:** Evasive CSS/JS tricks (like javascript links hidden via style rules) cannot be detected without careful parsing traversal that preserves attribute context before extraction.
+4.  **Operational Balance:** The Hard-OR Ensemble (Random Forest + XGBoost) is the optimal production configuration, achieving **81.00% TPR** and **3.30% FPR**, providing a highly sensitive gateway shield.
+5.  **Persisted pipeline is deployment-ready:** All feature extractors and models are serialized; the end-to-end pipeline is ready for integration.

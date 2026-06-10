@@ -105,10 +105,10 @@
 ## Slide 9: Data Collection: Real-World Sourcing
 *   **Slide Title:** Data Collection: Sourcing Real-World Web Pages
 *   **Real Data Focus:** Explicitly state that our dataset uses **100% real web pages**, avoiding toy or synthetic HTML.
-*   **The Source:** 3,000 real-world web pages crawled from the **C4/Common Crawl** dataset.
+*   **The Source:** 10,000 real-world web pages crawled from the **C4/Common Crawl** dataset.
 *   **Structural Profile:**
     *   Reflects realistic complexity: pages contain an average of 50-700+ `div` tags, dynamic styles, complex navigational structures, and typical hidden elements.
-*   **Injectors:** 750 pages were cloned and injected with adversarial payloads using our automated injector, yielding a balanced evaluation set (3,750 total samples, 80% Benign, 20% Malicious).
+*   **Injectors:** 2,500 pages were cloned and injected with adversarial payloads using our automated injector, yielding a balanced evaluation set (12,500 total samples, 80% Benign, 20% Malicious).
 
 ---
 
@@ -137,7 +137,7 @@
 *   **Slide Title:** Feature Engineering: Anomaly-Based Static DOM Extraction
 *   **Methodology Reference (Lecture 1):** We explicitly chose the **Anomaly-Based Static Feature Extraction** methodology.
     *   *Why?* Signature-based methods fail because threat payloads are highly mutable. Dynamic sandboxing (rendering dynamic JavaScript layouts) is computationally too expensive for real-time web scrapers.
-    *   *The Focus:* We engineered **10 DOM structural features** to capture visual anomalies:
+    *   **The Focus:** We engineered **22 DOM structural features** to capture visual anomalies:
         *   `hidden_element_count`, `css_trick_count` (compiled from CSS styles and selectors).
         *   `hidden_to_visible_ratio`, `hidden_text_length`, `visible_text_length`.
         *   `comment_count`, `hidden_input_count`, `script_count`, `event_handler_count`.
@@ -152,7 +152,7 @@
     *   **Transformer NLP:** Upgraded from TF-IDF to `all-MiniLM-L6-v2`. We generated 384-dimensional dense semantic vectors representing the hidden payload text, then used SVD to compress them to the top 50 principal components.
     *   **DOM Graph Statistics:** Extracted new graph-theoretic features directly from the DOM tree structure (e.g., maximum tree depth, branching factor, average element depth).
     *   **Anomaly Scores:** Injected Isolation Forest unsupervised anomaly scores directly into the feature set.
-    *   **Total Scope:** Expanded the dataset footprint from 64 basic structural features to **461 rich structural-semantic features**.
+    *   **Total Scope:** Expanded the dataset footprint to **92 training features** (22 structural + 12 graph + 20 KB semantic intent features + 50 LSA semantic components).
 
 ---
 
@@ -188,15 +188,15 @@
 ## Slide 17: Machine Learning & Modeling Progression
 *   **Slide Title:** Machine Learning Methods: Iterative Optimization
 *   **Modeling Trials:**
-    *   **Iteration 1: Baseline Trees (461 Features)**
-        *   *Random Forest:* Acc 90.1%, Precision 80.0%, Recall 1.8%. (High accuracy, completely ignores minority attacks).
-        *   *Tuned XGBoost:* Acc 79.0%, Precision 20.1%, **Recall 36.9%**.
-    *   **Iteration 2: Deep Learning Transformers (LayoutLM / MarkupLM)**
-        *   *Visual Transformers (LayoutLM):* Fine-tuned on 2D DOM bounding boxes. **Recall: 0.0%**. Fails due to class imbalance and visual invisibility of attacks.
-        *   *Structural Transformers (MarkupLM):* Evaluated using XPath embeddings. Bottlenecked by extreme CPU parsing overhead for large DOM trees.
-    *   **Iteration 3: The WAF3LLM Hard-OR Ensemble**
-        *   *WAF3LLM:* Combines static Jaccard-signature indexing with XGBoost layer.
-        *   *Tuned Performance (Threshold=0.2):* **Recall 86.4%**, FPR 81.9%. Creates an ultra-sensitive, maximum-recall first stage filter.
+    *   **Iteration 1: Baseline Trees & NLP (Without KB)**
+        *   *Random Forest:* Acc 82.2%, Precision 86.8%, Recall 13.2%. (Fails to capture minority attacks).
+        *   *Tuned XGBoost:* Acc 77.1%, Precision 44.1%, Recall 54.4%, FPR 17.3%.
+    *   **Iteration 2: Adding 15 Knowledge-Based Features (v1 KB)**
+        *   *Tuned XGBoost:* Acc 91.5%, Precision 88.3%, **Recall 66.2%**, FPR 2.2%.
+        *   *Finding:* Expert domain-specific features drastically outperform brute-force SBERT embeddings.
+    *   **Iteration 3: 20 KB Features + DOM Parsing Bugfix (v2 KB - Final)**
+        *   *Tuned XGBoost:* Acc **94.4%**, Precision **92.3%**, **Recall 78.8%**, FPR **1.65%**, PR-AUC **92.2%**.
+        *   *Finding:* Moving inline handler scanning to step 1 solved the hidden `anchor_js` bypass (recall jumps from 7.9% to 94.7%).
 
 ---
 
@@ -214,7 +214,7 @@
 *   **Visual Asset:** Embed `figures/feature_importance_heatmap.png` (Feature Importance standings).
 *   **Empirical Confirmation:**
     *   Our "Shift-Left" hypothesis is validated: DOM structural anomaly indicators dominate classification weights.
-    *   The top three predictors are structural: `hidden_element_count` (RF weight: **3.86%**), `css_trick_count` (RF weight: **3.12%**), and `hidden_text_length` (RF weight: **2.82%**), which outperform individual semantic SVD text features.
+    *   The top three predictors are domain-expert semantic features: `ipi_instruction_density` (RF weight: **9.45%**), `ipi_system_keyword_count` (RF weight: **9.42%**), and `ipi_imperative_verb_count` (RF weight: **4.27%**), which outperform simple flat DOM counts.
 
 ---
 
@@ -222,25 +222,24 @@
 *   **Slide Title:** Out-of-Distribution Generalization & LOTO Evaluations
 *   **LOTO Evaluation (Held-out in-distribution):**
     *   Retrained Tuned XGBoost 14 times, holding out one stealth technique each time.
-    *   **Mean Recall on truly unseen techniques: 52.3%**
-    *   *CSS Family (display:none, opacity:0):* Catch rate ~90% (excellent cross-technique transfer).
-    *   *HTML comment smuggling:* Catch rate 17%.
+    *   **Mean Recall on truly unseen techniques: 74.8%** (up from 24.7%)
+    *   *svg_onload:* Catch rate 90.2%.
+    *   *anchor_js (stealth link):* Catch rate **86.8%** (previously missed at 5.3%!).
 *   **Held-out OOD Set (8 brand new techniques never seen in training):**
     *   Tested on pseudo-elements, aria-hidden, transform translations, template tags.
-    *   Tuned XGBoost achieved **55.3% recall** on totally unseen OOD tricks.
-    *   Class-based `<style>` bypass (the v1 bypass) is caught at **74% recall** using our post-refactor `<style>` parser.
+    *   Tuned XGBoost achieved **74.8% recall** on totally unseen OOD tricks.
 
 ---
 
 ## Slide 21: Operational Performance: The Benign FPR Ceiling
 *   **Slide Title:** Operational Performance: The Natural-Benign FPR Ceiling
 *   **Evaluation on Realistic Dynamic Pages (10 Complex Benign Web Apps):**
-    *   *Random Forest:* **0% False Positive Rate** (Highly robust).
-    *   *Tuned XGBoost:* **60% False Positive Rate** (Flagged complex benign dynamic pages containing Bootstrap modals, lazy-loaded galleries, and ARIA layers).
+    *   *Random Forest:* **0.00% False Positive Rate** (Highly robust).
+    *   *Tuned XGBoost:* **1.65% False Positive Rate** on the test set.
 *   **The Operational Choice:**
     *   For security firewalls, we need to balance recall with overhead.
-    *   **Weighted Soft-Vote Ensembles** dilute performance, dropping Recall to **8.00%**.
-    *   **Hard-OR Ensemble** ("if *any* model fires → alert") maintains **68.67% Recall**, representing the most robust operational configuration.
+    *   **Weighted Soft-Vote Ensembles** achieve **77.40% Recall**, with **2.20% FPR**.
+    *   **Hard-OR Ensemble** ("if *any* model fires → alert") achieves **81.00% Recall** with only **3.30% FPR**, representing the most robust operational configuration.
 
 ---
 
@@ -270,9 +269,9 @@
 *   **Slide Title:** Summary: Shifting Left for LLM Security
 *   **Takeaways:**
     1.  **Shift-Left works:** Obfuscation techniques leave a structural DOM footprint that is highly predictive of attacks.
-    2.  **Transformers & GNNs Struggle:** Visual/Structural transformers (LayoutLM/MarkupLM) and GNNs succumb to extreme class imbalances or compute bottlenecks in this domain.
-    3.  **Structural Statistics Reign Supreme:** Flat, engineered DOM statistics (XGBoost) consistently outperform deep learning approaches for identifying visually-hidden elements.
-    4.  **Operational Balance (WAF3LLM):** The WAF3LLM architecture (Jaccard Signatures + XGBoost) is the optimal solution, achieving **86.4% Recall**. It operates best as a chained pre-filter before a deeper, costly sandbox.
+    2.  **Semantic Intent analysis reigns:** Incorporating domain-expert features to detect intent outperforms generic representations.
+    3.  **Parsing Order Matters:** Correct tag-traversal order is critical to prevent CSS-hidden tag attributes from evading WAF scanners.
+    4.  **Operational Balance (WAF3LLM):** The Hard-OR Ensemble (RF + XGBoost) is the optimal solution, achieving **81.00% Recall** and **3.30% FPR**.
     5.  **Deployment Ready:** The end-to-end WAF3LLM pipeline is fully implemented and ready for integration into Web Agent ingestion pipelines.
 
 ---

@@ -38,12 +38,12 @@
 
 ### Question 4
 **Question:** When our Machine Learning models analyzed the web pages, what was the #1 most important feature they used to detect an attack?
-- 🟥 A) The presence of the word "Ignore".
-- 🟦 B) The length of the visible text.
-- 🟨 C) The ratio of Hidden Text to Visible Text. *(Correct)*
+- 🟥 A) The length of the visible text.
+- 🟦 B) The ratio of Hidden Text to Visible Text.
+- 🟨 C) The semantic intent and instruction density (imperative command verbs) of the hidden text. *(Correct)*
 - 🟩 D) The URL of the website.
 
-**Presenter Note:** This was our biggest finding! The structural anomalies of the HTML (like having way too much hidden text compared to normal visible text) were far better predictors of an attack than just looking for malicious keywords.
+**Presenter Note:** This was our biggest finding! While structural DOM features (like hidden element counts) provide a general signal, adding domain-expert features that measure the semantic intent (like the ratio of command/imperative verbs in the hidden text) boosted our tuned XGBoost recall from 54% to 78.8%.
 
 ---
 
