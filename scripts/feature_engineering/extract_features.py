@@ -32,6 +32,7 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from minhash_vectorizer import MinHashVectorizer
+from ipi_knowledge_features import extract_ipi_kb_features
 
 csv.field_size_limit(sys.maxsize)
 
@@ -425,6 +426,9 @@ def parse_html_features(html_content: str) -> dict:
     # Graph-based DOM structural features
     graph_feats = extract_dom_graph_features(html_content)
 
+    # Knowledge-based IPI features (semantic intent analysis)
+    kb_feats = extract_ipi_kb_features(hidden_text, visible_text)
+
     result = {
         'hidden_element_count': hidden_element_count,
         'css_trick_count': css_trick_count,
@@ -439,6 +443,7 @@ def parse_html_features(html_content: str) -> dict:
         'hidden_text': hidden_text,
     }
     result.update(graph_feats)
+    result.update(kb_feats)
     return result
 
 
