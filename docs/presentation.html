@@ -1395,18 +1395,18 @@
             </div>
         </div>
 
-        <!-- SLIDE 15: ITERATION 1 — BASELINE TREE MODELS -->
+        <!-- SLIDE 15: ITERATION 1 — BASELINE TREES (WITHOUT KB) -->
         <div class="slide">
-            <h2 class="slide-title">Iteration 1 — Baseline Tree Models</h2>
-            <p class="slide-subtitle">Evaluating clean, leak-free baseline performance</p>
+            <h2 class="slide-title">Iteration 1 — Baseline Trees (Without KB)</h2>
+            <p class="slide-subtitle">Evaluating performance on the scaled 10k dataset without semantic intent features</p>
             
             <div class="grid-2">
                 <div class="card">
                     <h3>🌳 The Tree Classifiers</h3>
-                    <p>We trained out-of-the-box Random Forest and baseline XGBoost on the URL-grouped datasets. Removing the page overlap leakage resulted in highly realistic baseline scores:</p>
+                    <p>We trained out-of-the-box Random Forest and baseline/tuned XGBoost on the URL-grouped 10,000 Common Crawl page dataset. Stripping templates forces generalization, but structural counts alone struggle with visual camouflage:</p>
                     <ul>
-                        <li><strong>Random Forest:</strong> Achieved **100.0% Precision**. Since train and test sets had zero website overlap, the model refused to make false alarms, yielding 100% precision but extremely low Recall (4.67%).</li>
-                        <li><strong>XGBoost (Baseline):</strong> XGBoost's baseline recall landed at 26.67% with an F1-Score of 33.90%.</li>
+                        <li><strong>Random Forest:</strong> Acc 82.24%, Precision 86.84%, with a low Recall of 13.20% as it struggles with minority target patterns.</li>
+                        <li><strong>Tuned XGBoost:</strong> Reached Recall of 54.40% and F1-Score of 48.70% (FPR of 17.25%), showing standard structural signatures are insufficient.</li>
                     </ul>
                 </div>
                 
@@ -1425,90 +1425,29 @@
                         <tbody>
                             <tr>
                                 <td>Random Forest</td>
-                                <td>80.93%</td>
-                                <td style="color:var(--accent-green); font-weight:bold;">100.00%</td>
-                                <td>4.67%</td>
-                                <td>8.92%</td>
+                                <td>82.24%</td>
+                                <td>86.84%</td>
+                                <td>13.20%</td>
+                                <td>22.92%</td>
                             </tr>
                             <tr>
-                                <td>XGBoost (Baseline)</td>
-                                <td>79.20%</td>
-                                <td>46.51%</td>
-                                <td>26.67%</td>
-                                <td>33.90%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 16: ITERATION 2 — LINEAR MODELS -->
+        <!-- SLIDE 16: ITERATION 2 — ADDING K-B FEATURES (v1 KB) -->
         <div class="slide">
-            <h2 class="slide-title">Iteration 2 — Linear Classifiers</h2>
-            <p class="slide-subtitle">Evaluating Logistic Regression and class balancing</p>
-            
-            <div class="grid-2">
-                <div class="card">
-                    <h3>📈 Linear Splits & Imbalance</h3>
-                    <p>We trained Logistic Regression with balanced class weights (`class_weight='balanced'`) to penalize minority misclassifications and draw linear decision boundaries on the SVD dimensions.</p>
-                    <ul>
-                        <li><strong>Recall Boost:</strong> Imbalance weight correction pushed Recall up to **56.00%** (catching over half of the injections).</li>
-                        <li><strong>The Precision Penalty:</strong> The linear model became overly paranoid, flagging massive numbers of benign websites. Precision collapsed to **20.90%**, dragging overall Accuracy down to **48.80%**.</li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3>📊 Comparison vs. Baseline</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Model</th>
-                                <th>Accuracy</th>
-                                <th>Precision</th>
-                                <th>Recall</th>
-                                <th>F1-Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Random Forest</td>
-                                <td>80.93%</td>
-                                <td>100.00%</td>
-                                <td>4.67%</td>
-                                <td>8.92%</td>
-                            </tr>
-                            <tr class="highlight-row">
-                                <td>Logistic Regression</td>
-                                <td>48.80%</td>
-                                <td style="color:var(--accent-red);">20.90%</td>
-                                <td style="color:var(--accent-green);">56.00%</td>
-                                <td>30.43%</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 17: ITERATION 3 — TUNING & IMBALANCE WEIGHTING -->
-        <div class="slide">
-            <h2 class="slide-title">Iteration 3 — Tuning & Imbalance Weighting</h2>
-            <p class="slide-subtitle">Optimizing gradient boosting to maximize threat coverage</p>
+            <h2 class="slide-title">Iteration 2 — Adding Knowledge-Based Features (v1 KB)</h2>
+            <p class="slide-subtitle">Evaluating the impact of 15 domain-expert semantic features</p>
             
             <div class="grid-2">
                 <div class="card secure">
-                    <h3>🛠️ Hyperparameter & Weight Tuning</h3>
-                    <p>We optimized XGBoost by incorporating `scale_pos_weight = 4.0` (penalizing missing positive samples 4x harder) and executing a 3-fold cross-validated random grid search.</p>
+                    <h3>📈 Semantic Knowledge-Based Boost</h3>
+                    <p>We engineered 15 custom domain features targeting malicious command semantics (imperative verb density, roleplay jailbreak phrases, exfiltration target urls) to augment flat DOM counts.</p>
                     <ul>
-                        <li><strong>Tuned Parameters:</strong> Depth=3, learning_rate=0.01, estimators=400, subsample=0.8.</li>
-                        <li><strong>Optimized Recall:</strong> Recall surged to **68.67%** (nearly triple the baseline XGBoost score).</li>
-                        <li><strong>F1 Leadership:</strong> Achieved a peak F1-Score of **38.94%**, representing the most robust standalone classifier.</li>
+                        <li><strong>Recall Surge:</strong> Tuned XGBoost recall jumped from **54.40%** to **66.20%** (an absolute increase of +11.8%).</li>
+                        <li><strong>Precision Recovery:</strong> By targeting actual intent rather than just structural camo, precision surged to **88.30%** and False Positive Rate dropped to just **2.20%**.</li>
                     </ul>
                 </div>
                 
                 <div class="card">
-                    <h3>📈 Metrics Comparison</h3>
+                    <h3>📊 Comparison: Baseline vs. v1 KB</h3>
                     <table>
                         <thead>
                             <tr>
@@ -1521,18 +1460,55 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>XGBoost (Baseline)</td>
-                                <td>79.20%</td>
-                                <td>46.51%</td>
-                                <td>26.67%</td>
-                                <td>33.90%</td>
+                                <td>XGBoost (Tuned Baseline)</td>
+                                <td>77.08%</td>
+                                <td>44.08%</td>
+                                <td>54.40%</td>
+                                <td>48.70%</td>
+                            </tr>
+        </div>
+
+        <!-- SLIDE 17: ITERATION 3 — 20 KB FEATURES & BUGFIX (v2 KB - FINAL) -->
+        <div class="slide">
+            <h2 class="slide-title">Iteration 3 — 20 KB Features & Bugfix (v2 KB)</h2>
+            <p class="slide-subtitle">Resolving html parsing bug and expanding semantic decoding layers</p>
+            
+            <div class="grid-2">
+                <div class="card secure">
+                    <h3>🛠️ DOM Traversal Order Correctness</h3>
+                    <p>We resolved a key vulnerability in our feature extractor where visually hidden event handlers were dropped from structural scanning. Checking event handlers and JS anchors *before* visual element extraction closes the blind spot.</p>
+                    <ul>
+                        <li><strong>Feature Set Expansion:</strong> Added 5 new KB features (privilege levels, base64 payload scanners, HTML entity decoders) for a total of 20 expert features.</li>
+                        <li><strong>Final Performance:</strong> Recall surges to **78.80%** (up from 66.20%), while False Positive Rate drops to a record **1.65%** (Precision **92.27%**).</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>📈 Metrics: v1 KB vs. Final v2 KB</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Accuracy</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1-Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>XGBoost (Tuned v1 KB)</td>
+                                <td>91.48%</td>
+                                <td>88.27%</td>
+                                <td>66.20%</td>
+                                <td>75.66%</td>
                             </tr>
                             <tr class="highlight-row">
-                                <td>XGBoost (Tuned)</td>
-                                <td>56.93%</td>
-                                <td>27.18%</td>
-                                <td style="color:var(--accent-green); font-weight:bold;">68.67%</td>
-                                <td style="color:var(--accent-green); font-weight:bold;">38.94%</td>
+                                <td>XGBoost (Tuned v2 KB)</td>
+                                <td>94.44%</td>
+                                <td style="color:var(--accent-green); font-weight:bold;">92.27%</td>
+                                <td style="color:var(--accent-green); font-weight:bold;">78.80%</td>
+                                <td style="color:var(--accent-green); font-weight:bold;">85.01%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1543,19 +1519,22 @@
         <!-- SLIDE 18: OPERATIONAL ENSEMBLES -->
         <div class="slide">
             <h2 class="slide-title">Operational Ensembles</h2>
-            <p class="slide-subtitle">Analyzing recall dilution vs. the recall-maximizing Hard-OR architecture</p>
+            <p class="slide-subtitle">Ensembling to balance maximum threat recall with low false positive rates</p>
             
             <div class="grid-2">
-                <div class="card threat">
-                    <h3>❌ The Soft-Voting Dilution Trap</h3>
-                    <p>Combining classifiers using standard soft-voting averages probabilities. The low-recall predictions of under-trained classifiers (RF, LR) completely dilute the tuned XGBoost, dropping overall Recall to **8.00%**.</p>
+                <div class="card secure">
+                    <h3>👥 Weighted Soft-Voting Ensemble</h3>
+                    <p>By weighting sub-models (Random Forest, Tuned XGBoost) by their validation PR-AUC, the Weighted Soft Vote achieves a strong balance:</p>
+                    <ul>
+                        <li><strong>Balanced Results:</strong> Achieves **77.40% Recall** and **2.20% FPR** on the test split.</li>
+                    </ul>
                 </div>
                 
                 <div class="card secure">
                     <h3>🛡️ Hard-OR WAF Ensemble</h3>
-                    <p>For cyber-security firewalls, we need to maximize detection rates. We implemented a **Hard-OR Ensemble** (triggering an alert if *any* model detects injection).</p>
+                    <p>For corporate proxy environments requiring maximum threat coverage, the **Hard-OR Ensemble** triggers an alert if *any* model in the pipeline fires:</p>
                     <ul>
-                        <li><strong>Maximum Coverage:</strong> Achieves a robust **68.67% Recall** to act as a resilient corporate proxy filter.</li>
+                        <li><strong>Maximum Recall:</strong> Recall surges to **81.00%**, capturing zero-day obfuscations while keeping FPR under **3.30%**.</li>
                     </ul>
                 </div>
             </div>
@@ -1569,10 +1548,10 @@
             <div class="grid-2">
                 <div class="card secure">
                     <h3>🔬 Generalizing to Unseen Evasions</h3>
-                    <p>To verify that our WAF generalizes to new, unseen styles, we ran a **Leave-One-Technique-Out** ablation study. The model was trained without a specific technique and evaluated strictly on that technique.</p>
+                    <p>To verify that our WAF generalizes to unseen styles, we ran a **Leave-One-Technique-Out** ablation study. The model was trained without a specific technique and evaluated strictly on that technique.</p>
                     <ul>
-                        <li><strong>Structural Signal Preservation:</strong> The model successfully identified unseen techniques (e.g., `visibility_hidden_div` at **90.9% recall** and `zero_size_div` at **92.3% recall**).</li>
-                        <li><strong>Generalization Proof:</strong> This proves the WAF learns *structural indicators of hiding* rather than just overfitting to specific string patterns.</li>
+                        <li><strong>OOD Generalization:</strong> The model successfully identified unseen techniques (e.g., `svg_onload` at **90.2% recall** and `anchor_js` stealth links at **86.8% recall**).</li>
+                        <li><strong>Zero-Day Resilience:</strong> Reached a **74.8% mean LOTO recall** (up from 24.7%) and achieved **74.8% recall** on a separate held-out OOD set with 8 brand new techniques.</li>
                     </ul>
                 </div>
                 
@@ -1588,24 +1567,29 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>visibility_hidden_div</td>
-                                <td>n = 11</td>
-                                <td style="color:var(--accent-green); font-weight:bold;">90.9%</td>
+                                <td>svg_onload</td>
+                                <td>n = 41</td>
+                                <td style="color:var(--accent-green); font-weight:bold;">90.2%</td>
+                            </tr>
+                            <tr>
+                                <td>anchor_js</td>
+                                <td>n = 38</td>
+                                <td style="color:var(--accent-green); font-weight:bold;">86.8%</td>
+                            </tr>
+                            <tr>
+                                <td>body_onload</td>
+                                <td>n = 43</td>
+                                <td>86.0%</td>
                             </tr>
                             <tr>
                                 <td>zero_size_div</td>
-                                <td>n = 13</td>
-                                <td style="color:var(--accent-green); font-weight:bold;">92.3%</td>
+                                <td>n = 28</td>
+                                <td>85.7%</td>
                             </tr>
-                            <tr>
-                                <td>opacity_zero_div</td>
-                                <td>n =  9</td>
-                                <td>88.9%</td>
-                            </tr>
-                            <tr>
-                                <td>display_none_div</td>
-                                <td>n =  9</td>
-                                <td>88.9%</td>
+                            <tr class="highlight-row">
+                                <td>Mean LOTO Recall</td>
+                                <td>—</td>
+                                <td style="color:var(--accent-cyan); font-weight:bold;">74.8%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1616,18 +1600,18 @@
         <!-- SLIDE 20: Hypothesis Validation -->
         <div class="slide">
             <h2 class="slide-title">Validating the Hypothesis (Feature Importance)</h2>
-            <p class="slide-subtitle">DOM structural indicators dominate semantic text embeddings</p>
+            <p class="slide-subtitle">Expert domain-specific features dominate raw structural counts</p>
             
             <div class="grid-2">
                 <div class="card secure">
                     <h3>🏆 Top Predictor Standings</h3>
-                    <p>The feature importance analysis confirms our core "Shift-Left" thesis: structural discrepancies are infinitely stronger predictors of injections than flat NLP text.</p>
+                    <p>The feature importance standings validate our hypothesis: domain-expert features mapping malicious command intent are the strongest predictors of prompt injections.</p>
                     <ul style="margin-top:10px;">
-                        <li style="margin-bottom:8px;"><strong>#1 Predictor:</strong> <code>hidden_element_count</code> (RF weight: <strong>3.86%</strong>).</li>
-                        <li style="margin-bottom:8px;"><strong>#2 Predictor:</strong> <code>css_trick_count</code> (RF weight: <strong>3.12%</strong>).</li>
-                        <li style="margin-bottom:8px;"><strong>#3 Predictor:</strong> <code>hidden_text_length</code> (RF weight: <strong>2.82%</strong>).</li>
-                        <li style="margin-bottom:8px;"><strong>#4 Predictor:</strong> <code>hidden_to_visible_ratio</code> (RF weight: <strong>2.59%</strong>).</li>
-                        <li style="margin-bottom:8px;"><strong>#5 Predictor:</strong> <code>lsa_embed_24</code> (RF weight: <strong>1.84%</strong>).</li>
+                        <li style="margin-bottom:8px;"><strong>#1 Predictor:</strong> <code>ipi_instruction_density</code> (RF weight: <strong>9.45%</strong>).</li>
+                        <li style="margin-bottom:8px;"><strong>#2 Predictor:</strong> <code>ipi_system_keyword_count</code> (RF weight: <strong>9.42%</strong>).</li>
+                        <li style="margin-bottom:8px;"><strong>#3 Predictor:</strong> <code>ipi_imperative_verb_count</code> (RF weight: <strong>4.27%</strong>).</li>
+                        <li style="margin-bottom:8px;"><strong>#4 Predictor:</strong> <code>hidden_element_count</code> (RF weight: <strong>3.86%</strong>).</li>
+                        <li style="margin-bottom:8px;"><strong>#5 Predictor:</strong> <code>css_trick_count</code> (RF weight: <strong>3.12%</strong>).</li>
                     </ul>
                 </div>
                 
@@ -1641,34 +1625,34 @@
         <!-- SLIDE 21: CONFUSION MATRICES -->
         <div class="slide">
             <h2 class="slide-title">Confusion Matrices & Decision Matrices</h2>
-            <p class="slide-subtitle">Comparing model classification distributions on clean test splits</p>
+            <p class="slide-subtitle">Comparing model classification distributions on the 2,500 test split</p>
             
             <div class="grid-3">
                 <div class="card center-slide">
                     <h3 style="font-size:1.15rem;">🌳 Random Forest</h3>
                     <div style="background:rgba(0,0,0,0.3); border-radius:8px; width:100%; height:180px; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:'JetBrains Mono', monospace; font-size:0.85rem; line-height:1.8;">
-                        True Benign : 600 | 0<br>
-                        True Inject : 143 | 7
+                        True Benign : 1942 | 58<br>
+                        True Inject :  125 | 375
                     </div>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:10px;">Perfect benign security, but misses almost all injections.</p>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:10px;">High benign security (2.90% FPR), catching 75.0% of injections.</p>
                 </div>
                 
                 <div class="card center-slide highlight-row">
                     <h3 style="font-size:1.15rem; color:var(--accent-cyan);">🚀 Tuned XGBoost</h3>
                     <div style="background:rgba(0,0,0,0.3); border-radius:8px; width:100%; height:180px; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:'JetBrains Mono', monospace; font-size:0.85rem; line-height:1.8; border:1px solid rgba(6,182,212,0.2);">
-                        True Benign : 324 | 276<br>
-                        True Inject :  47 | 103
+                        True Benign : 1967 | 33<br>
+                        True Inject :  106 | 394
                     </div>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:10px;">Optimal operational balance, catching 68% of threats.</p>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:10px;">Optimal operational balance, catching 78.8% of threats with only 1.65% FPR.</p>
                 </div>
                 
                 <div class="card center-slide">
                     <h3 style="font-size:1.15rem;">📈 Logistic Regression</h3>
                     <div style="background:rgba(0,0,0,0.3); border-radius:8px; width:100%; height:180px; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:'JetBrains Mono', monospace; font-size:0.85rem; line-height:1.8;">
-                        True Benign : 282 | 318<br>
-                        True Inject :  66 | 84
+                        True Benign : 1758 | 242<br>
+                        True Inject :  142 | 358
                     </div>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:10px;">Paranoid baseline, misclassifies clean pages.</p>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:10px;">Linear baseline, higher false alarms on dynamic layouts (12.10% FPR).</p>
                 </div>
             </div>
         </div>
@@ -1683,9 +1667,9 @@
                     <h3>📈 Classifier Comparison</h3>
                     <p>The ROC curve maps the True Positive Rate (Recall) against the False Positive Rate (FPR) across all classification thresholds:</p>
                     <ul style="margin-top:10px;">
-                        <li style="margin-bottom:8px;"><strong>Random Forest:</strong> Leads overall diagnostics with a ROC-AUC of **0.6772**, showing robust potential though requiring threshold adjustment.</li>
-                        <li style="margin-bottom:8px;"><strong>Ensemble & XGBoost:</strong> Showcase robust diagnostic capability with ROC-AUCs of **0.6738** (Weighted Ensemble) and **0.6531** (Tuned XGBoost).</li>
-                        <li style="margin-bottom:8px;"><strong>Logistic Regression:</strong> Near-random-guess performance (ROC-AUC: **0.5172**), validating that structural prompt injection footprints are highly non-linear and require non-linear models.</li>
+                        <li style="margin-bottom:8px;"><strong>Random Forest:</strong> Reaches an outstanding ROC-AUC of **0.9594**, showing excellent threshold-free classification.</li>
+                        <li style="margin-bottom:8px;"><strong>Ensemble & XGBoost:</strong> Showcase peak diagnostic capabilities with ROC-AUCs of **0.9666** (Hard-OR Ensemble), **0.9613** (Weighted Soft Vote) and **0.9637** (Tuned XGBoost).</li>
+                        <li style="margin-bottom:8px;"><strong>Logistic Regression:</strong> Reaches ROC-AUC of **0.8661**, proving structural signals are partially linear but significantly benefit from non-linear tree models.</li>
                     </ul>
                 </div>
                 
@@ -1837,24 +1821,25 @@
 
         <!-- SLIDE 25: LIMITATIONS & FUTURE WORK -->
         <div class="slide">
-            <h2 class="slide-title">Limitations & Future Work</h2>
-            <p class="slide-subtitle">Addressing gaps in dynamic single-page applications</p>
+            <h2 class="slide-title">Future Work: Multilingual Jailbreaks</h2>
+            <p class="slide-subtitle">Addressing language blindspots in semantic intent classifiers</p>
             
             <div class="grid-2">
                 <div class="card threat">
-                    <h3>⚠️ Static DOM Scrapers</h3>
-                    <p>The static HTML parsing approach has limitations against highly complex, modern JS applications:</p>
+                    <h3>⚠️ The Multilingual Vulnerability</h3>
+                    <p>Web agents scrape dynamic global content. Attackers can bypass English-only filters by writing hidden instructions in other languages:</p>
                     <ul>
-                        <li><strong>Dynamic Hydration:</strong> React or Angular pages generate hidden structures on-the-fly inside the client browser.</li>
-                        <li><strong>Bypass:</strong> If an injection is rendered dynamically *after* static fetching, static WAFs will miss the payload.</li>
+                        <li><strong>Foreign Language Injections:</strong> A Chinese payload (e.g., <code>忽略之前的指令...</code>) will bypass English-centric keywords but execute perfectly in multilingual LLMs.</li>
+                        <li><strong>Word List Failures:</strong> Static blacklists are easily evaded using foreign translations.</li>
                     </ul>
                 </div>
                 
                 <div class="card secure">
-                    <h3>🚀 Future Research Directions</h3>
+                    <h3>🚀 Swap to Multilingual Encoders</h3>
+                    <p>Since our structural-semantic architecture is modular, we propose a direct upgrade to swap the English MiniLM model:</p>
                     <ul>
-                        <li><strong>Dynamic Computations:</strong> Transition to Playwright headless rendering to capture real-time calculated layout states.</li>
-                        <li><strong>Transformer NLP:</strong> Replace TF-IDF/SVD LSA with a pre-trained Transformer (e.g., RoBERTa/MiniLM) to identify toxic injection semantics.</li>
+                        <li><strong>Multilingual Transformer:</strong> Upgrade to <code>paraphrase-multilingual-MiniLM-L12-v2</code>.</li>
+                        <li><strong>Universal WAF:</strong> Provides robust semantic intent classification across 50+ languages with zero layout modifications.</li>
                     </ul>
                 </div>
             </div>
@@ -1926,9 +1911,9 @@
             "13. Structural Features",
             "14. Data Distribution Analysis",
             "15. Semantic Features (NLP)",
-            "16. Iteration 1 — Baseline Tree Models",
-            "17. Iteration 2 — Linear Classifiers",
-            "18. Iteration 3 — XGBoost Tuning",
+            "16. Iteration 1 — Baseline Trees (Without KB)",
+            "17. Iteration 2 — Adding KB Features (v1 KB)",
+            "18. Iteration 3 — 20 KB Features & Bugfix",
             "19. Operational Ensembles",
             "20. Leave-One-Technique-Out",
             "21. Hypothesis Validation",
@@ -1937,7 +1922,7 @@
             "24. Interactive WAF Sandbox",
             "25. Comparative Benchmarking (NDSS 2026)",
             "26. Real-World Deployment",
-            "27. Limitations & Future Work",
+            "27. Future Work: Multilingual Jailbreaks",
             "28. Conclusion & Q&A"
         ];
 

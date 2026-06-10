@@ -90,7 +90,7 @@ flowchart LR
     end
     
     subgraph "3. Classification (Tuned XGBoost)"
-    E --> H([Dense Feature Matrix<br/>58 Dimensional])
+    E --> H([Dense Feature Matrix<br/>92 Dimensional])
     F --> H
     G --> H
     
